@@ -12,6 +12,9 @@ server {
     listen              80;
     server_name         intranation.com;
 
+    # redirects
+    include intranation-tumblr-redirects.conf;
+
     # these variables are defined in a main file that includes this one
     root                $intranation_root;
 
