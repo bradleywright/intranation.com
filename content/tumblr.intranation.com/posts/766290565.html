@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="766290565" url="http://tumblr.intranation.com/post/766290565" url-with-slug="http://tumblr.intranation.com/post/766290565/how-set-up-your-own-private-git-server-linux" type="regular" date-gmt="2010-01-09 19:54:00 GMT" date="Sat, 09 Jan 2010 19:54:00" unix-timestamp="1263066840" format="html" reblog-key="bcD7huwB" slug="how-set-up-your-own-private-git-server-linux"><regular-title>How to set up your own private Git server on Linux</regular-title><regular-body>&lt;p&gt;&lt;strong&gt;Update 2:&lt;/strong&gt; as pointed out by &lt;a href="http://timhuegdon.com/" rel="friend met colleague"&gt;Tim Huegdon&lt;/a&gt;, several comments on &lt;a href="http://news.ycombinator.com/item?id=1652414"&gt;a Hacker News thread pointing here&lt;/a&gt;, and the excellent &lt;a href="http://progit.org/book/ch4-8.html"&gt;Pro Git&lt;/a&gt; book, &lt;a href="http://wiki.github.com/sitaramc/gitolite/"&gt;Gitolite&lt;/a&gt; seems to be a better solution for multi-user hosted Git than Gitosis. I particularly like the branch–level permissions aspect, and what that means for business teams. I’ve left the original article intact.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; the ever–vigilant &lt;a href="http://mikewest.org" rel="friend met colleague"&gt;Mike West&lt;/a&gt; has pointed out that my instructions for &lt;a href="#permissions-change"&gt;permissions&lt;/a&gt; and &lt;a href="#git-co-change"&gt;git checkout&lt;/a&gt; were slightly askew. These errors have been rectified.&lt;/p&gt;
+&lt;p&gt;One of the things I’m attempting to achieve this year is simplifying my life somewhat. Given how much of my life revolves around technology, a large part of this will be consolidating the various services I consume (and often pay for). The mention of payment is important, as up until now I’ve been paying the awesome &lt;a href="http://github.com/"&gt;GitHub&lt;/a&gt; for their basic plan.&lt;/p&gt;
+&lt;p&gt;I don’t have many private repositories with them, and all of them are strictly private code (this blog; &lt;a href="http://yahnyinlondon.com" rel="sweetheart met friend co-resident"&gt;Amanda’s blog templates and styles&lt;/a&gt;; and some other bits) which don&amp;#8217;t require collaborators. For this reason, paying money to GitHub (awesome though they may be) seemed wasteful.&lt;/p&gt;
+&lt;p&gt;So I decided to move all my private repositories to my own server. This is how I did it.&lt;/p&gt;
+&lt;h2&gt;Set up the server&lt;/h2&gt;
+&lt;p&gt;These instructions were performed on a Debian 5 &amp;#8220;Lenny&amp;#8221; box, so assume them to be the same on Ubuntu. Substitute the package installation commands as required if you’re on an alternative distribution.&lt;/p&gt;
+&lt;p&gt;First, if you haven’t done so already, add your public key to the server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;kbd&gt;ssh myuser@server.com mkdir .ssh&lt;/kbd&gt;
+&lt;kbd&gt;scp ~/.ssh/id_rsa.pub myuser@server.com:.ssh/authorized_keys&lt;/kbd&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can SSH into our server and install Git:&lt;/p&gt;
+
+&lt;pre&gt;&lt;kbd&gt;ssh myserver.com&lt;/kbd&gt;
+&lt;kbd&gt;sudo apt-get update&lt;/kbd&gt;
+&lt;kbd&gt;sudo apt-get install git-core&lt;/kbd&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;#8230;and that’s it.&lt;/p&gt;
+
+&lt;h3&gt;Adding a user&lt;/h3&gt;
+
+&lt;p&gt;If you intend to share these repositories with any collaborators, at this point you’ll either:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Want to install something like &lt;a href="http://eagain.net/gitweb/?p=gitosis.git"&gt;Gitosis&lt;/a&gt; (outside the scope of this article, but &lt;a href="http://scie.nti.st/2007/11/14/hosting-git-repositories-the-easy-and-secure-way"&gt;this is a good, if old, tutorial&lt;/a&gt;); or&lt;/li&gt;
+&lt;li&gt;Add a “shared” Git user.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;We’ll be following the latter option. So, add a Git user:&lt;/p&gt;
+
+&lt;pre&gt;&lt;kbd&gt;sudo adduser git&lt;/kbd&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you’ll need to add your public key to the Git user’s &lt;code&gt;authorized_keys&lt;/code&gt;:&lt;/p&gt;
+&lt;pre id="permissions-change"&gt;&lt;kbd&gt;sudo mkdir /home/git/.ssh&lt;/kbd&gt;
+&lt;kbd&gt;sudo cp ~/.ssh/authorized_keys /home/git/.ssh/&lt;/kbd&gt;
+&lt;kbd&gt;sudo chown -R git:git /home/git/.ssh&lt;/kbd&gt;
+&lt;kbd&gt;sudo chmod 700 !$&lt;/kbd&gt;
+&lt;kbd&gt;sudo chmod 600 /home/git/.ssh/*&lt;/kbd&gt;
+&lt;/pre&gt;
+&lt;p&gt;Now you’ll be able to authenticate as the Git user via SSH. Test it out:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;ssh git@myserver.com&lt;/kbd&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Add your repositories&lt;/h2&gt;
+&lt;p&gt;If you were to not share the repositories, and just wanted to access them for yourself (like I did, since I have no collaborators), you’d do the following as yourself. Otherwise, do it as the Git user we added above.&lt;/p&gt;
+&lt;p&gt;If using the Git user, log in as them:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;login git&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can create our repositories:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;mkdir myrepo.git&lt;/kbd&gt;
+&lt;kbd&gt;cd !$&lt;/kbd&gt;
+&lt;kbd&gt;git --bare init&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;The last steps creates an empty repository. We’re assuming you already have a local repository that you just want to push to a remote server.&lt;/p&gt;
+&lt;p&gt;Repeat that last step for each remote Git repository you want.&lt;/p&gt;
+&lt;p&gt;Log out of the server as the remaining operations will be completed on your local machine.&lt;/p&gt;
+&lt;h2&gt;Configure your development machine&lt;/h2&gt;
+&lt;p&gt;First, we add the remotes to your &lt;em&gt;local machine&lt;/em&gt;. If you’ve already defined a remote named &lt;var&gt;origin&lt;/var&gt; (for example, if you followed GitHub’s instructions), you’ll want to delete the remote first:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;git remote rm origin&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Now we can add our new remote:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;git remote add origin git@server.com:myrepo.git&lt;/kbd&gt;
+&lt;kbd&gt;git push origin master&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And that’s it. You&amp;#8217;ll probably also want to make sure you add a default merge and remote:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;git config branch.master.remote origin &amp;amp;&amp;amp; git config branch.master.merge refs/heads/master&lt;/kbd&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that’s all. Now you can push/pull from &lt;var&gt;origin&lt;/var&gt; as much as you like, and it’ll be stored remotely on your own &lt;var&gt;myserver.com&lt;/var&gt; remote repository.&lt;/p&gt;
+
+&lt;h2&gt;Bonus points: Make SSH more secure&lt;/h2&gt;
+
+&lt;p&gt;This has been extensively covered by the &lt;a href="http://articles.slicehost.com/2009/3/31/debian-lenny-setup-page-1"&gt;excellent Slicehost tutorial&lt;/a&gt;, but just to recap:&lt;/p&gt;
+
+&lt;p&gt;Edit the SSH config:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;sudo vi /etc/ssh/sshd_config&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And change the following values:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Port 2207
+...
+PermitRootLogin no
+...
+AllowUsers myuser git
+...
+PasswordAuthentication no&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Where &lt;var&gt;2207&lt;/var&gt; is a port of your choosing. Make sure to add this so your Git remote:&lt;/p&gt;
+&lt;pre id="git-co-change"&gt;&lt;kbd&gt;git remote add origin ssh://git@myserver.com:2207/~/myrepo.git&lt;/kbd&gt;&lt;/pre&gt;</regular-body><tag>git</tag><tag>linux</tag><tag>development</tag></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:14 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">January 9, 2010, 7:54 pm</span>
+            
+        </div>
+        
+        <h1>How to set up your own private Git server on Linux</h1><div><p><strong>Update 2:</strong> as pointed out by <a href="http://timhuegdon.com/" rel="friend met colleague">Tim Huegdon</a>, several comments on <a href="http://news.ycombinator.com/item?id=1652414">a Hacker News thread pointing here</a>, and the excellent <a href="http://progit.org/book/ch4-8.html">Pro Git</a> book, <a href="http://wiki.github.com/sitaramc/gitolite/">Gitolite</a> seems to be a better solution for multi-user hosted Git than Gitosis. I particularly like the branch–level permissions aspect, and what that means for business teams. I’ve left the original article intact.</p>
+<p><strong>Update:</strong> the ever–vigilant <a href="http://mikewest.org" rel="friend met colleague">Mike West</a> has pointed out that my instructions for <a href="#permissions-change">permissions</a> and <a href="#git-co-change">git checkout</a> were slightly askew. These errors have been rectified.</p>
+<p>One of the things I’m attempting to achieve this year is simplifying my life somewhat. Given how much of my life revolves around technology, a large part of this will be consolidating the various services I consume (and often pay for). The mention of payment is important, as up until now I’ve been paying the awesome <a href="http://github.com/">GitHub</a> for their basic plan.</p>
+<p>I don’t have many private repositories with them, and all of them are strictly private code (this blog; <a href="http://yahnyinlondon.com" rel="sweetheart met friend co-resident">Amanda’s blog templates and styles</a>; and some other bits) which don&#8217;t require collaborators. For this reason, paying money to GitHub (awesome though they may be) seemed wasteful.</p>
+<p>So I decided to move all my private repositories to my own server. This is how I did it.</p>
+<h2>Set up the server</h2>
+<p>These instructions were performed on a Debian 5 &#8220;Lenny&#8221; box, so assume them to be the same on Ubuntu. Substitute the package installation commands as required if you’re on an alternative distribution.</p>
+<p>First, if you haven’t done so already, add your public key to the server:</p>
+
+<pre><kbd>ssh myuser@server.com mkdir .ssh</kbd>
+<kbd>scp ~/.ssh/id_rsa.pub myuser@server.com:.ssh/authorized_keys</kbd></pre>
+
+<p>Now we can SSH into our server and install Git:</p>
+
+<pre><kbd>ssh myserver.com</kbd>
+<kbd>sudo apt-get update</kbd>
+<kbd>sudo apt-get install git-core</kbd></pre>
+
+<p>&#8230;and that’s it.</p>
+
+<h3>Adding a user</h3>
+
+<p>If you intend to share these repositories with any collaborators, at this point you’ll either:</p>
+<ul><li>Want to install something like <a href="http://eagain.net/gitweb/?p=gitosis.git">Gitosis</a> (outside the scope of this article, but <a href="http://scie.nti.st/2007/11/14/hosting-git-repositories-the-easy-and-secure-way">this is a good, if old, tutorial</a>); or</li>
+<li>Add a “shared” Git user.</li>
+</ul><p>We’ll be following the latter option. So, add a Git user:</p>
+
+<pre><kbd>sudo adduser git</kbd></pre>
+
+<p>Now you’ll need to add your public key to the Git user’s <code>authorized_keys</code>:</p>
+<pre id="permissions-change"><kbd>sudo mkdir /home/git/.ssh</kbd>
+<kbd>sudo cp ~/.ssh/authorized_keys /home/git/.ssh/</kbd>
+<kbd>sudo chown -R git:git /home/git/.ssh</kbd>
+<kbd>sudo chmod 700 !$</kbd>
+<kbd>sudo chmod 600 /home/git/.ssh/*</kbd>
+</pre>
+<p>Now you’ll be able to authenticate as the Git user via SSH. Test it out:</p>
+<pre><kbd>ssh git@myserver.com</kbd></pre>
+
+<h2>Add your repositories</h2>
+<p>If you were to not share the repositories, and just wanted to access them for yourself (like I did, since I have no collaborators), you’d do the following as yourself. Otherwise, do it as the Git user we added above.</p>
+<p>If using the Git user, log in as them:</p>
+<pre><kbd>login git</kbd></pre>
+<p>Now we can create our repositories:</p>
+<pre><kbd>mkdir myrepo.git</kbd>
+<kbd>cd !$</kbd>
+<kbd>git --bare init</kbd></pre>
+<p>The last steps creates an empty repository. We’re assuming you already have a local repository that you just want to push to a remote server.</p>
+<p>Repeat that last step for each remote Git repository you want.</p>
+<p>Log out of the server as the remaining operations will be completed on your local machine.</p>
+<h2>Configure your development machine</h2>
+<p>First, we add the remotes to your <em>local machine</em>. If you’ve already defined a remote named <var>origin</var> (for example, if you followed GitHub’s instructions), you’ll want to delete the remote first:</p>
+<pre><kbd>git remote rm origin</kbd></pre>
+<p>Now we can add our new remote:</p>
+<pre><kbd>git remote add origin git@server.com:myrepo.git</kbd>
+<kbd>git push origin master</kbd></pre>
+<p>And that’s it. You&#8217;ll probably also want to make sure you add a default merge and remote:</p>
+<pre><kbd>git config branch.master.remote origin &amp;&amp; git config branch.master.merge refs/heads/master</kbd></pre>
+
+<p>And that’s all. Now you can push/pull from <var>origin</var> as much as you like, and it’ll be stored remotely on your own <var>myserver.com</var> remote repository.</p>
+
+<h2>Bonus points: Make SSH more secure</h2>
+
+<p>This has been extensively covered by the <a href="http://articles.slicehost.com/2009/3/31/debian-lenny-setup-page-1">excellent Slicehost tutorial</a>, but just to recap:</p>
+
+<p>Edit the SSH config:</p>
+<pre><kbd>sudo vi /etc/ssh/sshd_config</kbd></pre>
+<p>And change the following values:</p>
+<pre><code>Port 2207
+...
+PermitRootLogin no
+...
+AllowUsers myuser git
+...
+PasswordAuthentication no</code></pre>
+<p>Where <var>2207</var> is a port of your choosing. Make sure to add this so your Git remote:</p>
+<pre id="git-co-change"><kbd>git remote add origin ssh://git@myserver.com:2207/~/myrepo.git</kbd></pre></div>    </body>
+</html>

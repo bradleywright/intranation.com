@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3>" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:15 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="archive_body">        
+        <div class="post_meta">
+            <span class="timestamp">October 15, 2008, 7:53 pm</span>
+            <a class="permalink" href="../posts/766288807.html">#</a>
+        </div>
+        
+        <h1>Synchronising Things using Dropbox</h1><div><h2>Important update</h2>
+<p>I no longer recommend this approach for keeping Things synchronised between two Macs. Use the <a href="http://culturedcode.com/things/wiki/index.php/Syncing_Things_on_multiple_Macs_%28FAQ%29">guidelines for syncing multiple Macs</a> from the official <a href="http://culturedcode.com/things/wiki/index.php/Welcome">Things Wiki</a> to relocate the database to somewhere on your Dropbox, rather than using the symlink method below.</p>
+<p>The usual caveats apply: you still can’t run Things on more than one computer simultaneously, and if you update it on one computer you may experience issues opening the database on the older copy.</p>
+<h2>Original article</h2>
+<p>Lately, I’ve been thinking that I need to get more organised. The endless shuffle between work and life has me missing or forgetting things, and I can’t possibly be expected to remember every little thing or errand that pops up.</p>
+<p>Despite my allergy to all things <a href="http://en.wikipedia.org/wiki/Getting_Things_Done"><abbr title="Getting Things Done">GTD</abbr></a> (I’m of the belief that it verges on cult–ike amongst its adherents), there’s something inherently appealing about a so–called “trusted system”, where everything you might need to know or do is filed somewhere for later retrieval.</p>
+<p>Of course, there’s always the appeal of wading through a checklist knocking things off the list. It <em>feels</em> productive, and that’s important for motivation.</p>
+<h2>The contenders</h2>
+<p>To the best of my knowledge, there are two main contenders in the Mac GTD camp:</p>
+<ul><li>Cultured Code’s <a href="http://culturedcode.com/things/">Things</a>; and</li>
+    <li>The Omni Group’s <a href="http://omnigroup.com/applications/omnifocus/">OmniFocus</a>.</li>
+</ul><p>I won’t go too much into the differences between them (<a href="http://www.viewfromthedock.com/2008/02/09/year-of-the-killer-task-management-app-wrap-up/">this would be a good place to start, even if it’s a little out of date</a>), but let’s start with a personal preference: I like Things&#8217;s “Now/Next/Someday” paradigm more than I like OmniFocus’s way of doing things. I also prefer the tag—based approach Things takes, since sometimes entries won’t be just “Mac&#160;: Home”, or ”Mac&#160;: Work”, but might just be “Mac” in general, but they&#8217;re also “Personal” or “Work”. OmniFocus <em>seems</em> to only exist in a single axis, whereas Things has tags. So I can add as many or as little as I like, and drill down accordingly. At work I’m ”Online” but also ”Work”. On my lunch break, I’m just “Online” (so I could continue in my quest to tag the <a href="http://flickr.com/photos/intranation/tags/needstags/" title="Tag bankruptcy!">1000+ photos on Flickr that need them</a> with my down time).</p>
+<p>There’s one killer feature of OmniFocus for me, though: it can synchronise between installations (my work MacBook Pro, and my home MacBook) without an iPhone. I don’t have an iPhone. Things doesn’t synchronise without one. What’s a boy to do?</p>
+<h2>Enter Dropbox</h2>
+<p>The <a href="http://culturedcode.com/things/wiki/index.php?title=Welcome">Things Wiki</a> has some outlandish suggestions including <a href="http://culturedcode.com/things/wiki/index.php?title=User_talk:Bunker">Using Applescript + <abbr title="Subversion">SVN</abbr></a> to keep Things in <abbr title="synchronisation">sync</abbr>. Certainly, a plist and launchd solution would work, but it seems slightly complicated and prone to breakage.</p>
+<p><a href="http://carlo.zottmann.org/" rel="colleague">Carlo Zottmann</a> first gave me the idea of using the excellent <a href="https://www.dropbox.com/referrals/NTE5NjgwOQ" title="Shameless referral whoring">Dropbox</a> service when he mentioned using <a href="http://agilewebsolutions.com/products/1Password">1Password</a>’s new <a href="http://www.switchersblog.com/2008/10/1password-29-br.html">Agile Keychain</a> in conjunction with it.</p>
+<p>Dropox is perfect for this type of activity:</p>
+<ul><li>It’s <a href="http://www.getdropbox.com/tour#2">quite</a> <a href="http://forums.getdropbox.com/topic.php?id=312&amp;replies=8#post-1354">secure</a>;</li>
+<li>The daemon listens for changes and uploads quietly in the background; and</li>
+<li>It’s available offline, since it works as just a folder in your home directory (<var>~/Dropbox</var>).</li>
+</ul><h3>A caveat</h3>
+<p>I’m not under the impression that Dropbox’s merge is anything to shake a stick at, so this technique will only work if you move from one computer to the other in sequence, and don’t have Things open in two places at the same time. Conflicts may occur in such a situation.</p>
+<h2>How do I do it?</h2>
+<p>Quite simple, actually. Cultured Code stores the database for Things in a per–user file called <var>Database.xml</var>, but after some fiddling I discovered that I couldn’t just symlink the file, as Things was blowing away the symlink and creating a new file each time. So some trickery was required. Make sure you shut down Things before you begin these steps, obviously.</p>
+<ul><li>First we make an appropriate folder on Dropbox (you just need to do this on your first computer, and obviously both computers need to have Dropbox installed):
+<pre><kbd>mkdir -p ~/Dropbox/Library</kbd></pre></li>
+<li>Then we hop into the folder just above where Things stores its database:
+<pre><kbd>cd ~/Library/Application\ Support/Cultured\ Code</kbd></pre></li>
+<li>We now move your existing Things database onto Dropbox (again, just on the first computer):
+<kbd>mv Things ~/Dropbox/Library/Things</kbd>, OR:</li>
+<li>If you’re on the second computer (at work, for example), you need to remove the <var>Things</var> folder:
+<pre><kbd>rm -rf Things</kbd></pre></li>
+<li>Now we link the Things folder to Dropbox:
+<pre><kbd>ln -s ~/Dropbox/Library/Things Things</kbd></pre></li>
+</ul><p>And you’re done! The symlink means that any changes made to <var>Database.xml</var> will be reflected on Dropbox almost immediately, and firing up each computer individually (but separately) will inherit those changes. Note that I’m using it on two computers, but you could theoretically use it on any number of computers, <strong>just as long as they’re not using Things simultaneously</strong>. That bold text is <em>very</em> important, pay attention please!</p>
+<h2>Consider this a feature request…</h2>
+<p>…that is, if any of the good folk from Cultured Code are listening!</p></div>        
+        <div class="post_meta">
+            <span class="timestamp">October 11, 2008, 7:53 pm</span>
+            <a class="permalink" href="../posts/766288554.html">#</a>
+        </div>
+        
+        <h1>Installing Django on OSX</h1><div><p>Despite <a href="http://www.djangoproject.com">Django</a> already having fairly <a href="http://docs.djangoproject.com/en/dev/topics/install/#installing-official-release">comprehensive documentation</a>, I still sometimes see people get confused about where the code goes, or how to get up and running quickly. Since a lot of these people are on <a href="http://www.apple.com/">Macs</a>, I thought it pertinent to write all the steps down to get your own Django development environment running on OS X. <strong>Important point:</strong> this will be done entirely with native OS X tools, and won’t require you to install <a href="http://www.macports.org/">MacPorts</a> or any other tools.</p>
+<p>From this point on we’re going to be working almost exclusively in the terminal, so fire up Terminal.app (or iTerm, if you&#8217;re that way inclined).</p>
+<h2>Python and package management</h2>
+<p>OS X ships with <a href="http://www.python.org">Python</a> already (2.5 on Leopard, 2.4 on Tiger), but it’s a slightly modified version of Python. To see which version you have, type the following in a terminal:</p>
+<pre><kbd>python</kbd></pre>
+<p>And you should see something like:</p>
+<pre><samp>$ python
+Python 2.5.1 (r251:54863, Feb  4 2008, 21:48:13) 
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt;</samp></pre>
+<p>This is actually the <a href="http://www.python.org/doc/2.5.2/tut/node4.html">Python interactive shell</a>, and you can run Python commands in here to test them out or check for installed packages. For example, we can see if Django is installed yet:</p>
+<pre><kbd>import django</kbd></pre>
+<p>Of course, if this worked successfully you wouldn’t need this article, so an error like the following should be seen:</p>
+<pre><samp>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+ImportError: No module named django</samp></pre>
+<p>The way Python works with import is that it looks in all the directories on sys.path to find packages. Packages are diectories with <var>__init__.py</var> files in them (normally), or sometimes just a single Python file. For more on packages, see <a href="http://www.python.org/doc/2.5.2/tut/node8.html">the Python documentation on packages</a>.</p>
+<p>To see which directories are looked in for packages by Python, type the following into the Python shell:</p>
+<pre><kbd>import sys
+sys.path</kbd></pre>
+<p>Which should return a list (indexed mutable array) of directory paths. One of them will most likely be <samp>/Library/Python/2.5/site-packages</samp>, which is the standard Python packages directory. It’s here that most Python package managers (like <a href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>) will try and put packages, but I’d normally rather keep them in somewhere which doesn’t require <kbd>sudo</kbd> to edit or change them. It’s a development environment after all!</p>
+<h2>Add to the Python packages</h2>
+<p>So we’re now going to add our own directory into the local version of Python. First we create a directory in our home:</p>
+<pre><kbd>mkdir ~/pythonpath</kbd></pre>
+<p>Then we need to add this directory to the <var>PYTHONPATH</var> environment variable:</p>
+<pre><kbd>echo "export PYTHONPATH=$HOME/pythonpath:\$PYTHONPATH" &gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p><var>PYTHONPATH</var> is intended to <a href="http://www.python.org/doc/2.5.2/tut/node8.html#SECTION008120000000000000000">extend the module search path</a>, and in this case we will use it to add user–specific extensions to Python. We added it to your <var>bash_profile</var>, so it should be available whenever you open a terminal window from now on.</p>
+<p>Now we can verify that it&#8217;s available:</p>
+<pre><kbd>python -c "import sys; print sys.path"</kbd></pre>
+<p>And your new <var>pythonpath</var> directory should be listed there.</p>
+<h2>Install Django</h2>
+<p>Now we need to install Django. I recommend running on the ”1.0.X” version, which is the “1.0 release with just bug fixes added” version, which is currently only available in <a href="http://subversion.tigris.org/">Subversion</a>:</p>
+<pre><kbd>svn co <a href="http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django">http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django</a> ~/pythonpath/django</kbd></pre>
+<p>which should check out the contents of 1.0.X into your <var>pythonpath</var>. If you don’t have Subversion installed, you can download the 1.0 tagged release as a tarball:</p>
+<pre><kbd>mkdir ~/source
+cd ~/source
+curl -O <a href="http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz">http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz</a>
+tar zxfv Django-1.0.tar.gz
+mv Django-1.0/django ~/pythonpath/django</kbd></pre>
+<p>Which achieves the same thing as the Subversion way, except you won’t be able to update your code as new releases are tagged.</p>
+<h3>Check that Django is installed</h3>
+<p>Type the following into a command line:</p>
+<pre><kbd>python -c "import django"</kbd></pre>
+<p>No errors is a Good Thing™.</p>
+<p>Now you have Django running, but you&#8217;ll need to get <var>django-admin.py</var> onto your path so that you can <a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/#creating-a-project">create new projects</a>. You can either do:</p>
+<pre><kbd>~/pythonpath/django/bin/django-admin.py [arguments]</kbd></pre>
+<p>or get that directory onto your path. I’ll leave that as an exercise for the reader.</p>
+<p>Now you have everything you need to run Django, but you also need a database.</p>
+<h2>Install MySQL</h2>
+<p><a href="http://www.mysql.com/">MySQL</a> is by far the most straight–forward database to install, since it comes with an <a href="http://dev.mysql.com/downloads/mysql/5.0.html#macosx-dmg">OS X package</a>, so go over and install that. It should give you a nice System Preferences panel as well.</p>
+<p>Now you need to add the MySQL commands to your path:</p>
+<pre><kbd>echo "export PATH=/usr/local/mysql/bin:$PATH" &gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p>And test that it works:</p>
+<pre><kbd>mysql -u root</kbd>
+<samp>Welcome to the MySQL monitor.  Commands end with&#160;; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.51b MySQL Community Server (GPL)
+
+Type &#8216;help;&#8217; or &#8216;\h&#8217; for help. Type &#8216;\c&#8217; to clear the buffer.
+
+mysql&gt;</samp></pre>
+<p><kbd>Ctrl + d</kbd> exits from the client.</p>
+<h3>Update: Install MySQLdb drivers</h3>
+<p>Python doesn’t ship with a native MySQL driver, so you need to install <var>python-mysqldb</var> as well.</p>
+<pre><kbd>mkdir -p ~/source
+cd ~/source
+curl -O \
+<a href="http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz">http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz</a>
+tar zxfv MySQL-python-1.2.2.tar.gz
+cd MySQL-python-1.2.2</kbd></pre>
+<p>Now there’s an issue with MySQLdb for Mac, in that there’s an error in the C code that powers it. Luckily it’s an easy fix. Edit the <var>~/source/MySQL-python-1.2.2/_mysql.c</var> file, and add <kbd>//</kbd> to the start of the line that reads:</p>
+<pre><samp>#define uint unsigned int</samp></pre>
+<p>So that it instead reads:</p>
+<pre><samp>//#define uint unsigned int</samp></pre>
+<p>and save the file. This code was on line 38 when I last checked. Now you can build and install the extension:</p>
+<pre><kbd>python setup.py build
+sudo python setup.py install</kbd></pre>
+<p>And it will be installed in your site packages. <strong>Note:</strong> I forgot this step the first time around, so thanks <a href="http://kerincosford.com/" rel="friend met colleague">Kerin</a> for reminding me.</p>
+<h2>Finished</h2>
+<p>Now you’ve done everything you need to begin the tutorials in the <a href="http://djangobook.com/">Django Book</a> (with the caveat that you’ll also need to read the <a href="http://docs.djangoproject.com/en/dev/releases/1.0-porting-guide/">0.96 to 1.0 porting guide</a>), and in the <a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/">getting started guide</a>.</p>
+<h2>Bonus points: Python Imaging Library</h2>
+<p>In order to use the <a href="http://docs.djangoproject.com/en/dev/ref/models/fields/#imagefield">ImageField</a> model field, you need to have the <a href="http://www.pythonware.com/products/pil/">Python Imaging Library</a> (or PIL) installed, as the images need to be validated and scaled by the model.</p>
+<p>OS X doesn’t ship with PIL, so we need to install it ourselves.</p>
+<p>You can download a <a href="http://pythonmac.org/packages/py25-fat/dmg/PIL-1.1.6-py2.5-macosx10.4-2007-05-18.dmg">pre–compiled version</a> from <a href="http://pythonmac.org">PythonMac</a>. This will be installed in the <var>site-packages</var> directory we saw earlier, and hence requires <var>sudo</var> on your computer (that’s what the little “you need to be authorised” popup dialogue is, more or less).</p>
+<p>However, the installer will not run quite as planned, as it <a href="http://www.p16blog.com/p16/2008/05/appengine-installing-pil-on-os-x-1053.html">PIL on OS X installs itself in the wrong place</a>. We need to run a few commands before we can run the freshly downloaded installer:</p>
+<pre><kbd>sudo ln -s /System/Library/Frameworks/Python.framework/ /Library/Frameworks/Python.framework
+echo "export \
+PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/\
+site-packages/:\$PYTHONPATH" \
+&gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p>Now run the installer and all should be good.</p>
+<h2>Bonus bonus points: dmigrations</h2>
+<p>If you have Subversion, and have any plans at all to update your site post–launch, you should be using <a href="http://code.google.com/p/dmigrations/">dmigrations</a>. Basically you get it onto your Python path:</p>
+<pre><kbd>svn co <a href="http://dmigrations.googlecode.com/svn/trunk/dmigrations">http://dmigrations.googlecode.com/svn/trunk/dmigrations</a> ~/pythonpath/dmigrations</kbd></pre>
+<p>and then <a href="http://code.google.com/p/dmigrations/wiki/DmigrationsTutorial">follow the dmigrations tutorial</a> to get up and running. Having migrated <a href="http://intranation.com/" rel="me">this very site</a> to dmigrations <em>after</em> launch, I can tell you that it’s much easier to just use it from the very beginning.</p>
+<p>Note that you don’t strictly need dmigrations to develop on, but it’s something you definitely want to be thinking about before launching anything publicly using Django.</p>
+<h2>Really finished</h2>
+<p>So now you should be ready to be up and running with Django on your Mac. Happy coding!</p></div>
+</body></html>

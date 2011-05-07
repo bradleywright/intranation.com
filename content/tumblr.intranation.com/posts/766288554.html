@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="766288554" url="http://tumblr.intranation.com/post/766288554" url-with-slug="http://tumblr.intranation.com/post/766288554/installing-django-osx" type="regular" date-gmt="2008-10-11 18:53:00 GMT" date="Sat, 11 Oct 2008 19:53:00" unix-timestamp="1223751180" format="html" reblog-key="YigXSTuw" slug="installing-django-osx"><regular-title>Installing Django on OSX</regular-title><regular-body>&lt;p&gt;Despite &lt;a href="http://www.djangoproject.com"&gt;Django&lt;/a&gt; already having fairly &lt;a href="http://docs.djangoproject.com/en/dev/topics/install/#installing-official-release"&gt;comprehensive documentation&lt;/a&gt;, I still sometimes see people get confused about where the code goes, or how to get up and running quickly. Since a lot of these people are on &lt;a href="http://www.apple.com/"&gt;Macs&lt;/a&gt;, I thought it pertinent to write all the steps down to get your own Django development environment running on OS X. &lt;strong&gt;Important point:&lt;/strong&gt; this will be done entirely with native OS X tools, and won’t require you to install &lt;a href="http://www.macports.org/"&gt;MacPorts&lt;/a&gt; or any other tools.&lt;/p&gt;
+&lt;p&gt;From this point on we’re going to be working almost exclusively in the terminal, so fire up Terminal.app (or iTerm, if you&amp;#8217;re that way inclined).&lt;/p&gt;
+&lt;h2&gt;Python and package management&lt;/h2&gt;
+&lt;p&gt;OS X ships with &lt;a href="http://www.python.org"&gt;Python&lt;/a&gt; already (2.5 on Leopard, 2.4 on Tiger), but it’s a slightly modified version of Python. To see which version you have, type the following in a terminal:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;python&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And you should see something like:&lt;/p&gt;
+&lt;pre&gt;&lt;samp&gt;$ python
+Python 2.5.1 (r251:54863, Feb  4 2008, 21:48:13) 
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&amp;gt;&amp;gt;&amp;gt;&lt;/samp&gt;&lt;/pre&gt;
+&lt;p&gt;This is actually the &lt;a href="http://www.python.org/doc/2.5.2/tut/node4.html"&gt;Python interactive shell&lt;/a&gt;, and you can run Python commands in here to test them out or check for installed packages. For example, we can see if Django is installed yet:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;import django&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Of course, if this worked successfully you wouldn’t need this article, so an error like the following should be seen:&lt;/p&gt;
+&lt;pre&gt;&lt;samp&gt;Traceback (most recent call last):
+  File "&amp;lt;stdin&amp;gt;", line 1, in &amp;lt;module&amp;gt;
+ImportError: No module named django&lt;/samp&gt;&lt;/pre&gt;
+&lt;p&gt;The way Python works with import is that it looks in all the directories on sys.path to find packages. Packages are diectories with &lt;var&gt;__init__.py&lt;/var&gt; files in them (normally), or sometimes just a single Python file. For more on packages, see &lt;a href="http://www.python.org/doc/2.5.2/tut/node8.html"&gt;the Python documentation on packages&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To see which directories are looked in for packages by Python, type the following into the Python shell:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;import sys
+sys.path&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Which should return a list (indexed mutable array) of directory paths. One of them will most likely be &lt;samp&gt;/Library/Python/2.5/site-packages&lt;/samp&gt;, which is the standard Python packages directory. It’s here that most Python package managers (like &lt;a href="http://peak.telecommunity.com/DevCenter/EasyInstall"&gt;easy_install&lt;/a&gt;) will try and put packages, but I’d normally rather keep them in somewhere which doesn’t require &lt;kbd&gt;sudo&lt;/kbd&gt; to edit or change them. It’s a development environment after all!&lt;/p&gt;
+&lt;h2&gt;Add to the Python packages&lt;/h2&gt;
+&lt;p&gt;So we’re now going to add our own directory into the local version of Python. First we create a directory in our home:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;mkdir ~/pythonpath&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Then we need to add this directory to the &lt;var&gt;PYTHONPATH&lt;/var&gt; environment variable:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;echo "export PYTHONPATH=$HOME/pythonpath:\$PYTHONPATH" &amp;gt;&amp;gt; ~/.bash_profile
+. ~/.bash_profile&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;var&gt;PYTHONPATH&lt;/var&gt; is intended to &lt;a href="http://www.python.org/doc/2.5.2/tut/node8.html#SECTION008120000000000000000"&gt;extend the module search path&lt;/a&gt;, and in this case we will use it to add user–specific extensions to Python. We added it to your &lt;var&gt;bash_profile&lt;/var&gt;, so it should be available whenever you open a terminal window from now on.&lt;/p&gt;
+&lt;p&gt;Now we can verify that it&amp;#8217;s available:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;python -c "import sys; print sys.path"&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And your new &lt;var&gt;pythonpath&lt;/var&gt; directory should be listed there.&lt;/p&gt;
+&lt;h2&gt;Install Django&lt;/h2&gt;
+&lt;p&gt;Now we need to install Django. I recommend running on the ”1.0.X” version, which is the “1.0 release with just bug fixes added” version, which is currently only available in &lt;a href="http://subversion.tigris.org/"&gt;Subversion&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;svn co &lt;a href="http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django"&gt;http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django&lt;/a&gt; ~/pythonpath/django&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;which should check out the contents of 1.0.X into your &lt;var&gt;pythonpath&lt;/var&gt;. If you don’t have Subversion installed, you can download the 1.0 tagged release as a tarball:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;mkdir ~/source
+cd ~/source
+curl -O &lt;a href="http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz"&gt;http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz&lt;/a&gt;
+tar zxfv Django-1.0.tar.gz
+mv Django-1.0/django ~/pythonpath/django&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Which achieves the same thing as the Subversion way, except you won’t be able to update your code as new releases are tagged.&lt;/p&gt;
+&lt;h3&gt;Check that Django is installed&lt;/h3&gt;
+&lt;p&gt;Type the following into a command line:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;python -c "import django"&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;No errors is a Good Thing™.&lt;/p&gt;
+&lt;p&gt;Now you have Django running, but you&amp;#8217;ll need to get &lt;var&gt;django-admin.py&lt;/var&gt; onto your path so that you can &lt;a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/#creating-a-project"&gt;create new projects&lt;/a&gt;. You can either do:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;~/pythonpath/django/bin/django-admin.py [arguments]&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;or get that directory onto your path. I’ll leave that as an exercise for the reader.&lt;/p&gt;
+&lt;p&gt;Now you have everything you need to run Django, but you also need a database.&lt;/p&gt;
+&lt;h2&gt;Install MySQL&lt;/h2&gt;
+&lt;p&gt;&lt;a href="http://www.mysql.com/"&gt;MySQL&lt;/a&gt; is by far the most straight–forward database to install, since it comes with an &lt;a href="http://dev.mysql.com/downloads/mysql/5.0.html#macosx-dmg"&gt;OS X package&lt;/a&gt;, so go over and install that. It should give you a nice System Preferences panel as well.&lt;/p&gt;
+&lt;p&gt;Now you need to add the MySQL commands to your path:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;echo "export PATH=/usr/local/mysql/bin:$PATH" &amp;gt;&amp;gt; ~/.bash_profile
+. ~/.bash_profile&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And test that it works:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;mysql -u root&lt;/kbd&gt;
+&lt;samp&gt;Welcome to the MySQL monitor.  Commands end with&amp;#160;; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.51b MySQL Community Server (GPL)
+
+Type &amp;#8216;help;&amp;#8217; or &amp;#8216;\h&amp;#8217; for help. Type &amp;#8216;\c&amp;#8217; to clear the buffer.
+
+mysql&amp;gt;&lt;/samp&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;kbd&gt;Ctrl + d&lt;/kbd&gt; exits from the client.&lt;/p&gt;
+&lt;h3&gt;Update: Install MySQLdb drivers&lt;/h3&gt;
+&lt;p&gt;Python doesn’t ship with a native MySQL driver, so you need to install &lt;var&gt;python-mysqldb&lt;/var&gt; as well.&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;mkdir -p ~/source
+cd ~/source
+curl -O \
+&lt;a href="http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz"&gt;http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz&lt;/a&gt;
+tar zxfv MySQL-python-1.2.2.tar.gz
+cd MySQL-python-1.2.2&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Now there’s an issue with MySQLdb for Mac, in that there’s an error in the C code that powers it. Luckily it’s an easy fix. Edit the &lt;var&gt;~/source/MySQL-python-1.2.2/_mysql.c&lt;/var&gt; file, and add &lt;kbd&gt;//&lt;/kbd&gt; to the start of the line that reads:&lt;/p&gt;
+&lt;pre&gt;&lt;samp&gt;#define uint unsigned int&lt;/samp&gt;&lt;/pre&gt;
+&lt;p&gt;So that it instead reads:&lt;/p&gt;
+&lt;pre&gt;&lt;samp&gt;//#define uint unsigned int&lt;/samp&gt;&lt;/pre&gt;
+&lt;p&gt;and save the file. This code was on line 38 when I last checked. Now you can build and install the extension:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;python setup.py build
+sudo python setup.py install&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;And it will be installed in your site packages. &lt;strong&gt;Note:&lt;/strong&gt; I forgot this step the first time around, so thanks &lt;a href="http://kerincosford.com/" rel="friend met colleague"&gt;Kerin&lt;/a&gt; for reminding me.&lt;/p&gt;
+&lt;h2&gt;Finished&lt;/h2&gt;
+&lt;p&gt;Now you’ve done everything you need to begin the tutorials in the &lt;a href="http://djangobook.com/"&gt;Django Book&lt;/a&gt; (with the caveat that you’ll also need to read the &lt;a href="http://docs.djangoproject.com/en/dev/releases/1.0-porting-guide/"&gt;0.96 to 1.0 porting guide&lt;/a&gt;), and in the &lt;a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/"&gt;getting started guide&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Bonus points: Python Imaging Library&lt;/h2&gt;
+&lt;p&gt;In order to use the &lt;a href="http://docs.djangoproject.com/en/dev/ref/models/fields/#imagefield"&gt;ImageField&lt;/a&gt; model field, you need to have the &lt;a href="http://www.pythonware.com/products/pil/"&gt;Python Imaging Library&lt;/a&gt; (or PIL) installed, as the images need to be validated and scaled by the model.&lt;/p&gt;
+&lt;p&gt;OS X doesn’t ship with PIL, so we need to install it ourselves.&lt;/p&gt;
+&lt;p&gt;You can download a &lt;a href="http://pythonmac.org/packages/py25-fat/dmg/PIL-1.1.6-py2.5-macosx10.4-2007-05-18.dmg"&gt;pre–compiled version&lt;/a&gt; from &lt;a href="http://pythonmac.org"&gt;PythonMac&lt;/a&gt;. This will be installed in the &lt;var&gt;site-packages&lt;/var&gt; directory we saw earlier, and hence requires &lt;var&gt;sudo&lt;/var&gt; on your computer (that’s what the little “you need to be authorised” popup dialogue is, more or less).&lt;/p&gt;
+&lt;p&gt;However, the installer will not run quite as planned, as it &lt;a href="http://www.p16blog.com/p16/2008/05/appengine-installing-pil-on-os-x-1053.html"&gt;PIL on OS X installs itself in the wrong place&lt;/a&gt;. We need to run a few commands before we can run the freshly downloaded installer:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;sudo ln -s /System/Library/Frameworks/Python.framework/ /Library/Frameworks/Python.framework
+echo "export \
+PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/\
+site-packages/:\$PYTHONPATH" \
+&amp;gt;&amp;gt; ~/.bash_profile
+. ~/.bash_profile&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;Now run the installer and all should be good.&lt;/p&gt;
+&lt;h2&gt;Bonus bonus points: dmigrations&lt;/h2&gt;
+&lt;p&gt;If you have Subversion, and have any plans at all to update your site post–launch, you should be using &lt;a href="http://code.google.com/p/dmigrations/"&gt;dmigrations&lt;/a&gt;. Basically you get it onto your Python path:&lt;/p&gt;
+&lt;pre&gt;&lt;kbd&gt;svn co &lt;a href="http://dmigrations.googlecode.com/svn/trunk/dmigrations"&gt;http://dmigrations.googlecode.com/svn/trunk/dmigrations&lt;/a&gt; ~/pythonpath/dmigrations&lt;/kbd&gt;&lt;/pre&gt;
+&lt;p&gt;and then &lt;a href="http://code.google.com/p/dmigrations/wiki/DmigrationsTutorial"&gt;follow the dmigrations tutorial&lt;/a&gt; to get up and running. Having migrated &lt;a href="http://intranation.com/" rel="me"&gt;this very site&lt;/a&gt; to dmigrations &lt;em&gt;after&lt;/em&gt; launch, I can tell you that it’s much easier to just use it from the very beginning.&lt;/p&gt;
+&lt;p&gt;Note that you don’t strictly need dmigrations to develop on, but it’s something you definitely want to be thinking about before launching anything publicly using Django.&lt;/p&gt;
+&lt;h2&gt;Really finished&lt;/h2&gt;
+&lt;p&gt;So now you should be ready to be up and running with Django on your Mac. Happy coding!&lt;/p&gt;</regular-body></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:15 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">October 11, 2008, 7:53 pm</span>
+            
+        </div>
+        
+        <h1>Installing Django on OSX</h1><div><p>Despite <a href="http://www.djangoproject.com">Django</a> already having fairly <a href="http://docs.djangoproject.com/en/dev/topics/install/#installing-official-release">comprehensive documentation</a>, I still sometimes see people get confused about where the code goes, or how to get up and running quickly. Since a lot of these people are on <a href="http://www.apple.com/">Macs</a>, I thought it pertinent to write all the steps down to get your own Django development environment running on OS X. <strong>Important point:</strong> this will be done entirely with native OS X tools, and won’t require you to install <a href="http://www.macports.org/">MacPorts</a> or any other tools.</p>
+<p>From this point on we’re going to be working almost exclusively in the terminal, so fire up Terminal.app (or iTerm, if you&#8217;re that way inclined).</p>
+<h2>Python and package management</h2>
+<p>OS X ships with <a href="http://www.python.org">Python</a> already (2.5 on Leopard, 2.4 on Tiger), but it’s a slightly modified version of Python. To see which version you have, type the following in a terminal:</p>
+<pre><kbd>python</kbd></pre>
+<p>And you should see something like:</p>
+<pre><samp>$ python
+Python 2.5.1 (r251:54863, Feb  4 2008, 21:48:13) 
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt;</samp></pre>
+<p>This is actually the <a href="http://www.python.org/doc/2.5.2/tut/node4.html">Python interactive shell</a>, and you can run Python commands in here to test them out or check for installed packages. For example, we can see if Django is installed yet:</p>
+<pre><kbd>import django</kbd></pre>
+<p>Of course, if this worked successfully you wouldn’t need this article, so an error like the following should be seen:</p>
+<pre><samp>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+ImportError: No module named django</samp></pre>
+<p>The way Python works with import is that it looks in all the directories on sys.path to find packages. Packages are diectories with <var>__init__.py</var> files in them (normally), or sometimes just a single Python file. For more on packages, see <a href="http://www.python.org/doc/2.5.2/tut/node8.html">the Python documentation on packages</a>.</p>
+<p>To see which directories are looked in for packages by Python, type the following into the Python shell:</p>
+<pre><kbd>import sys
+sys.path</kbd></pre>
+<p>Which should return a list (indexed mutable array) of directory paths. One of them will most likely be <samp>/Library/Python/2.5/site-packages</samp>, which is the standard Python packages directory. It’s here that most Python package managers (like <a href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>) will try and put packages, but I’d normally rather keep them in somewhere which doesn’t require <kbd>sudo</kbd> to edit or change them. It’s a development environment after all!</p>
+<h2>Add to the Python packages</h2>
+<p>So we’re now going to add our own directory into the local version of Python. First we create a directory in our home:</p>
+<pre><kbd>mkdir ~/pythonpath</kbd></pre>
+<p>Then we need to add this directory to the <var>PYTHONPATH</var> environment variable:</p>
+<pre><kbd>echo "export PYTHONPATH=$HOME/pythonpath:\$PYTHONPATH" &gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p><var>PYTHONPATH</var> is intended to <a href="http://www.python.org/doc/2.5.2/tut/node8.html#SECTION008120000000000000000">extend the module search path</a>, and in this case we will use it to add user–specific extensions to Python. We added it to your <var>bash_profile</var>, so it should be available whenever you open a terminal window from now on.</p>
+<p>Now we can verify that it&#8217;s available:</p>
+<pre><kbd>python -c "import sys; print sys.path"</kbd></pre>
+<p>And your new <var>pythonpath</var> directory should be listed there.</p>
+<h2>Install Django</h2>
+<p>Now we need to install Django. I recommend running on the ”1.0.X” version, which is the “1.0 release with just bug fixes added” version, which is currently only available in <a href="http://subversion.tigris.org/">Subversion</a>:</p>
+<pre><kbd>svn co <a href="http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django">http://code.djangoproject.com/svn/django/branches/releases/1.0.X/django</a> ~/pythonpath/django</kbd></pre>
+<p>which should check out the contents of 1.0.X into your <var>pythonpath</var>. If you don’t have Subversion installed, you can download the 1.0 tagged release as a tarball:</p>
+<pre><kbd>mkdir ~/source
+cd ~/source
+curl -O <a href="http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz">http://media.djangoproject.com/releases/1.0/Django-1.0.tar.gz</a>
+tar zxfv Django-1.0.tar.gz
+mv Django-1.0/django ~/pythonpath/django</kbd></pre>
+<p>Which achieves the same thing as the Subversion way, except you won’t be able to update your code as new releases are tagged.</p>
+<h3>Check that Django is installed</h3>
+<p>Type the following into a command line:</p>
+<pre><kbd>python -c "import django"</kbd></pre>
+<p>No errors is a Good Thing™.</p>
+<p>Now you have Django running, but you&#8217;ll need to get <var>django-admin.py</var> onto your path so that you can <a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/#creating-a-project">create new projects</a>. You can either do:</p>
+<pre><kbd>~/pythonpath/django/bin/django-admin.py [arguments]</kbd></pre>
+<p>or get that directory onto your path. I’ll leave that as an exercise for the reader.</p>
+<p>Now you have everything you need to run Django, but you also need a database.</p>
+<h2>Install MySQL</h2>
+<p><a href="http://www.mysql.com/">MySQL</a> is by far the most straight–forward database to install, since it comes with an <a href="http://dev.mysql.com/downloads/mysql/5.0.html#macosx-dmg">OS X package</a>, so go over and install that. It should give you a nice System Preferences panel as well.</p>
+<p>Now you need to add the MySQL commands to your path:</p>
+<pre><kbd>echo "export PATH=/usr/local/mysql/bin:$PATH" &gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p>And test that it works:</p>
+<pre><kbd>mysql -u root</kbd>
+<samp>Welcome to the MySQL monitor.  Commands end with&#160;; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.51b MySQL Community Server (GPL)
+
+Type &#8216;help;&#8217; or &#8216;\h&#8217; for help. Type &#8216;\c&#8217; to clear the buffer.
+
+mysql&gt;</samp></pre>
+<p><kbd>Ctrl + d</kbd> exits from the client.</p>
+<h3>Update: Install MySQLdb drivers</h3>
+<p>Python doesn’t ship with a native MySQL driver, so you need to install <var>python-mysqldb</var> as well.</p>
+<pre><kbd>mkdir -p ~/source
+cd ~/source
+curl -O \
+<a href="http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz">http://surfnet.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.tar.gz</a>
+tar zxfv MySQL-python-1.2.2.tar.gz
+cd MySQL-python-1.2.2</kbd></pre>
+<p>Now there’s an issue with MySQLdb for Mac, in that there’s an error in the C code that powers it. Luckily it’s an easy fix. Edit the <var>~/source/MySQL-python-1.2.2/_mysql.c</var> file, and add <kbd>//</kbd> to the start of the line that reads:</p>
+<pre><samp>#define uint unsigned int</samp></pre>
+<p>So that it instead reads:</p>
+<pre><samp>//#define uint unsigned int</samp></pre>
+<p>and save the file. This code was on line 38 when I last checked. Now you can build and install the extension:</p>
+<pre><kbd>python setup.py build
+sudo python setup.py install</kbd></pre>
+<p>And it will be installed in your site packages. <strong>Note:</strong> I forgot this step the first time around, so thanks <a href="http://kerincosford.com/" rel="friend met colleague">Kerin</a> for reminding me.</p>
+<h2>Finished</h2>
+<p>Now you’ve done everything you need to begin the tutorials in the <a href="http://djangobook.com/">Django Book</a> (with the caveat that you’ll also need to read the <a href="http://docs.djangoproject.com/en/dev/releases/1.0-porting-guide/">0.96 to 1.0 porting guide</a>), and in the <a href="http://docs.djangoproject.com/en/dev/intro/tutorial01/">getting started guide</a>.</p>
+<h2>Bonus points: Python Imaging Library</h2>
+<p>In order to use the <a href="http://docs.djangoproject.com/en/dev/ref/models/fields/#imagefield">ImageField</a> model field, you need to have the <a href="http://www.pythonware.com/products/pil/">Python Imaging Library</a> (or PIL) installed, as the images need to be validated and scaled by the model.</p>
+<p>OS X doesn’t ship with PIL, so we need to install it ourselves.</p>
+<p>You can download a <a href="http://pythonmac.org/packages/py25-fat/dmg/PIL-1.1.6-py2.5-macosx10.4-2007-05-18.dmg">pre–compiled version</a> from <a href="http://pythonmac.org">PythonMac</a>. This will be installed in the <var>site-packages</var> directory we saw earlier, and hence requires <var>sudo</var> on your computer (that’s what the little “you need to be authorised” popup dialogue is, more or less).</p>
+<p>However, the installer will not run quite as planned, as it <a href="http://www.p16blog.com/p16/2008/05/appengine-installing-pil-on-os-x-1053.html">PIL on OS X installs itself in the wrong place</a>. We need to run a few commands before we can run the freshly downloaded installer:</p>
+<pre><kbd>sudo ln -s /System/Library/Frameworks/Python.framework/ /Library/Frameworks/Python.framework
+echo "export \
+PYTHONPATH=/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/\
+site-packages/:\$PYTHONPATH" \
+&gt;&gt; ~/.bash_profile
+. ~/.bash_profile</kbd></pre>
+<p>Now run the installer and all should be good.</p>
+<h2>Bonus bonus points: dmigrations</h2>
+<p>If you have Subversion, and have any plans at all to update your site post–launch, you should be using <a href="http://code.google.com/p/dmigrations/">dmigrations</a>. Basically you get it onto your Python path:</p>
+<pre><kbd>svn co <a href="http://dmigrations.googlecode.com/svn/trunk/dmigrations">http://dmigrations.googlecode.com/svn/trunk/dmigrations</a> ~/pythonpath/dmigrations</kbd></pre>
+<p>and then <a href="http://code.google.com/p/dmigrations/wiki/DmigrationsTutorial">follow the dmigrations tutorial</a> to get up and running. Having migrated <a href="http://intranation.com/" rel="me">this very site</a> to dmigrations <em>after</em> launch, I can tell you that it’s much easier to just use it from the very beginning.</p>
+<p>Note that you don’t strictly need dmigrations to develop on, but it’s something you definitely want to be thinking about before launching anything publicly using Django.</p>
+<h2>Really finished</h2>
+<p>So now you should be ready to be up and running with Django on your Mac. Happy coding!</p></div>    </body>
+</html>

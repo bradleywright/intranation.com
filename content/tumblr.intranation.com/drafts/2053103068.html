@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="2053103068" url="http://tumblr.intranation.com/post/2053103068" url-with-slug="http://tumblr.intranation.com/post/2053103068/adding-an-additional-ip-address-to-a-virtual-machine" type="regular" date-gmt="2010-11-30 23:43:01 GMT" date="Tue, 30 Nov 2010 23:43:01" unix-timestamp="1291160581" format="html" reblog-key="9WEgLVZv" slug="adding-an-additional-ip-address-to-a-virtual-machine"><regular-title>Adding an additional IP address to a virtual machine</regular-title><regular-body>&lt;p&gt;&lt;kbd&gt;sudo vi /etc/network/interfaces&lt;/kbd&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;auto eth0:1
+iface eth0:1 inet static
+address 172.16.50.100 # pick an IP address outside VMWare's DHCP range
+netmask 255.255.255.0&lt;/code&gt;&lt;/pre&gt;</regular-body><tag>development</tag><tag>linux</tag><tag>virtualisation</tag></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:11 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">November 30, 2010, 11:43 pm</span>
+            
+        </div>
+        
+        <h1>Adding an additional IP address to a virtual machine</h1><div><p><kbd>sudo vi /etc/network/interfaces</kbd></p>
+
+<pre><code>auto eth0:1
+iface eth0:1 inet static
+address 172.16.50.100 # pick an IP address outside VMWare's DHCP range
+netmask 255.255.255.0</code></pre></div>    </body>
+</html>

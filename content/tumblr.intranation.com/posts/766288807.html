@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="766288807" url="http://tumblr.intranation.com/post/766288807" url-with-slug="http://tumblr.intranation.com/post/766288807/synchronising-things-using-dropbox" type="regular" date-gmt="2008-10-15 18:53:00 GMT" date="Wed, 15 Oct 2008 19:53:00" unix-timestamp="1224096780" format="html" reblog-key="OkjBKwUw" slug="synchronising-things-using-dropbox"><regular-title>Synchronising Things using Dropbox</regular-title><regular-body>&lt;h2&gt;Important update&lt;/h2&gt;
+&lt;p&gt;I no longer recommend this approach for keeping Things synchronised between two Macs. Use the &lt;a href="http://culturedcode.com/things/wiki/index.php/Syncing_Things_on_multiple_Macs_%28FAQ%29"&gt;guidelines for syncing multiple Macs&lt;/a&gt; from the official &lt;a href="http://culturedcode.com/things/wiki/index.php/Welcome"&gt;Things Wiki&lt;/a&gt; to relocate the database to somewhere on your Dropbox, rather than using the symlink method below.&lt;/p&gt;
+&lt;p&gt;The usual caveats apply: you still can’t run Things on more than one computer simultaneously, and if you update it on one computer you may experience issues opening the database on the older copy.&lt;/p&gt;
+&lt;h2&gt;Original article&lt;/h2&gt;
+&lt;p&gt;Lately, I’ve been thinking that I need to get more organised. The endless shuffle between work and life has me missing or forgetting things, and I can’t possibly be expected to remember every little thing or errand that pops up.&lt;/p&gt;
+&lt;p&gt;Despite my allergy to all things &lt;a href="http://en.wikipedia.org/wiki/Getting_Things_Done"&gt;&lt;abbr title="Getting Things Done"&gt;GTD&lt;/abbr&gt;&lt;/a&gt; (I’m of the belief that it verges on cult–ike amongst its adherents), there’s something inherently appealing about a so–called “trusted system”, where everything you might need to know or do is filed somewhere for later retrieval.&lt;/p&gt;
+&lt;p&gt;Of course, there’s always the appeal of wading through a checklist knocking things off the list. It &lt;em&gt;feels&lt;/em&gt; productive, and that’s important for motivation.&lt;/p&gt;
+&lt;h2&gt;The contenders&lt;/h2&gt;
+&lt;p&gt;To the best of my knowledge, there are two main contenders in the Mac GTD camp:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Cultured Code’s &lt;a href="http://culturedcode.com/things/"&gt;Things&lt;/a&gt;; and&lt;/li&gt;
+    &lt;li&gt;The Omni Group’s &lt;a href="http://omnigroup.com/applications/omnifocus/"&gt;OmniFocus&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;I won’t go too much into the differences between them (&lt;a href="http://www.viewfromthedock.com/2008/02/09/year-of-the-killer-task-management-app-wrap-up/"&gt;this would be a good place to start, even if it’s a little out of date&lt;/a&gt;), but let’s start with a personal preference: I like Things&amp;#8217;s “Now/Next/Someday” paradigm more than I like OmniFocus’s way of doing things. I also prefer the tag—based approach Things takes, since sometimes entries won’t be just “Mac&amp;#160;: Home”, or ”Mac&amp;#160;: Work”, but might just be “Mac” in general, but they&amp;#8217;re also “Personal” or “Work”. OmniFocus &lt;em&gt;seems&lt;/em&gt; to only exist in a single axis, whereas Things has tags. So I can add as many or as little as I like, and drill down accordingly. At work I’m ”Online” but also ”Work”. On my lunch break, I’m just “Online” (so I could continue in my quest to tag the &lt;a href="http://flickr.com/photos/intranation/tags/needstags/" title="Tag bankruptcy!"&gt;1000+ photos on Flickr that need them&lt;/a&gt; with my down time).&lt;/p&gt;
+&lt;p&gt;There’s one killer feature of OmniFocus for me, though: it can synchronise between installations (my work MacBook Pro, and my home MacBook) without an iPhone. I don’t have an iPhone. Things doesn’t synchronise without one. What’s a boy to do?&lt;/p&gt;
+&lt;h2&gt;Enter Dropbox&lt;/h2&gt;
+&lt;p&gt;The &lt;a href="http://culturedcode.com/things/wiki/index.php?title=Welcome"&gt;Things Wiki&lt;/a&gt; has some outlandish suggestions including &lt;a href="http://culturedcode.com/things/wiki/index.php?title=User_talk:Bunker"&gt;Using Applescript + &lt;abbr title="Subversion"&gt;SVN&lt;/abbr&gt;&lt;/a&gt; to keep Things in &lt;abbr title="synchronisation"&gt;sync&lt;/abbr&gt;. Certainly, a plist and launchd solution would work, but it seems slightly complicated and prone to breakage.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://carlo.zottmann.org/" rel="colleague"&gt;Carlo Zottmann&lt;/a&gt; first gave me the idea of using the excellent &lt;a href="https://www.dropbox.com/referrals/NTE5NjgwOQ" title="Shameless referral whoring"&gt;Dropbox&lt;/a&gt; service when he mentioned using &lt;a href="http://agilewebsolutions.com/products/1Password"&gt;1Password&lt;/a&gt;’s new &lt;a href="http://www.switchersblog.com/2008/10/1password-29-br.html"&gt;Agile Keychain&lt;/a&gt; in conjunction with it.&lt;/p&gt;
+&lt;p&gt;Dropox is perfect for this type of activity:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;It’s &lt;a href="http://www.getdropbox.com/tour#2"&gt;quite&lt;/a&gt; &lt;a href="http://forums.getdropbox.com/topic.php?id=312&amp;amp;replies=8#post-1354"&gt;secure&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;The daemon listens for changes and uploads quietly in the background; and&lt;/li&gt;
+&lt;li&gt;It’s available offline, since it works as just a folder in your home directory (&lt;var&gt;~/Dropbox&lt;/var&gt;).&lt;/li&gt;
+&lt;/ul&gt;&lt;h3&gt;A caveat&lt;/h3&gt;
+&lt;p&gt;I’m not under the impression that Dropbox’s merge is anything to shake a stick at, so this technique will only work if you move from one computer to the other in sequence, and don’t have Things open in two places at the same time. Conflicts may occur in such a situation.&lt;/p&gt;
+&lt;h2&gt;How do I do it?&lt;/h2&gt;
+&lt;p&gt;Quite simple, actually. Cultured Code stores the database for Things in a per–user file called &lt;var&gt;Database.xml&lt;/var&gt;, but after some fiddling I discovered that I couldn’t just symlink the file, as Things was blowing away the symlink and creating a new file each time. So some trickery was required. Make sure you shut down Things before you begin these steps, obviously.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;First we make an appropriate folder on Dropbox (you just need to do this on your first computer, and obviously both computers need to have Dropbox installed):
+&lt;pre&gt;&lt;kbd&gt;mkdir -p ~/Dropbox/Library&lt;/kbd&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Then we hop into the folder just above where Things stores its database:
+&lt;pre&gt;&lt;kbd&gt;cd ~/Library/Application\ Support/Cultured\ Code&lt;/kbd&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;We now move your existing Things database onto Dropbox (again, just on the first computer):
+&lt;kbd&gt;mv Things ~/Dropbox/Library/Things&lt;/kbd&gt;, OR:&lt;/li&gt;
+&lt;li&gt;If you’re on the second computer (at work, for example), you need to remove the &lt;var&gt;Things&lt;/var&gt; folder:
+&lt;pre&gt;&lt;kbd&gt;rm -rf Things&lt;/kbd&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;Now we link the Things folder to Dropbox:
+&lt;pre&gt;&lt;kbd&gt;ln -s ~/Dropbox/Library/Things Things&lt;/kbd&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;And you’re done! The symlink means that any changes made to &lt;var&gt;Database.xml&lt;/var&gt; will be reflected on Dropbox almost immediately, and firing up each computer individually (but separately) will inherit those changes. Note that I’m using it on two computers, but you could theoretically use it on any number of computers, &lt;strong&gt;just as long as they’re not using Things simultaneously&lt;/strong&gt;. That bold text is &lt;em&gt;very&lt;/em&gt; important, pay attention please!&lt;/p&gt;
+&lt;h2&gt;Consider this a feature request…&lt;/h2&gt;
+&lt;p&gt;…that is, if any of the good folk from Cultured Code are listening!&lt;/p&gt;</regular-body></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:15 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">October 15, 2008, 7:53 pm</span>
+            
+        </div>
+        
+        <h1>Synchronising Things using Dropbox</h1><div><h2>Important update</h2>
+<p>I no longer recommend this approach for keeping Things synchronised between two Macs. Use the <a href="http://culturedcode.com/things/wiki/index.php/Syncing_Things_on_multiple_Macs_%28FAQ%29">guidelines for syncing multiple Macs</a> from the official <a href="http://culturedcode.com/things/wiki/index.php/Welcome">Things Wiki</a> to relocate the database to somewhere on your Dropbox, rather than using the symlink method below.</p>
+<p>The usual caveats apply: you still can’t run Things on more than one computer simultaneously, and if you update it on one computer you may experience issues opening the database on the older copy.</p>
+<h2>Original article</h2>
+<p>Lately, I’ve been thinking that I need to get more organised. The endless shuffle between work and life has me missing or forgetting things, and I can’t possibly be expected to remember every little thing or errand that pops up.</p>
+<p>Despite my allergy to all things <a href="http://en.wikipedia.org/wiki/Getting_Things_Done"><abbr title="Getting Things Done">GTD</abbr></a> (I’m of the belief that it verges on cult–ike amongst its adherents), there’s something inherently appealing about a so–called “trusted system”, where everything you might need to know or do is filed somewhere for later retrieval.</p>
+<p>Of course, there’s always the appeal of wading through a checklist knocking things off the list. It <em>feels</em> productive, and that’s important for motivation.</p>
+<h2>The contenders</h2>
+<p>To the best of my knowledge, there are two main contenders in the Mac GTD camp:</p>
+<ul><li>Cultured Code’s <a href="http://culturedcode.com/things/">Things</a>; and</li>
+    <li>The Omni Group’s <a href="http://omnigroup.com/applications/omnifocus/">OmniFocus</a>.</li>
+</ul><p>I won’t go too much into the differences between them (<a href="http://www.viewfromthedock.com/2008/02/09/year-of-the-killer-task-management-app-wrap-up/">this would be a good place to start, even if it’s a little out of date</a>), but let’s start with a personal preference: I like Things&#8217;s “Now/Next/Someday” paradigm more than I like OmniFocus’s way of doing things. I also prefer the tag—based approach Things takes, since sometimes entries won’t be just “Mac&#160;: Home”, or ”Mac&#160;: Work”, but might just be “Mac” in general, but they&#8217;re also “Personal” or “Work”. OmniFocus <em>seems</em> to only exist in a single axis, whereas Things has tags. So I can add as many or as little as I like, and drill down accordingly. At work I’m ”Online” but also ”Work”. On my lunch break, I’m just “Online” (so I could continue in my quest to tag the <a href="http://flickr.com/photos/intranation/tags/needstags/" title="Tag bankruptcy!">1000+ photos on Flickr that need them</a> with my down time).</p>
+<p>There’s one killer feature of OmniFocus for me, though: it can synchronise between installations (my work MacBook Pro, and my home MacBook) without an iPhone. I don’t have an iPhone. Things doesn’t synchronise without one. What’s a boy to do?</p>
+<h2>Enter Dropbox</h2>
+<p>The <a href="http://culturedcode.com/things/wiki/index.php?title=Welcome">Things Wiki</a> has some outlandish suggestions including <a href="http://culturedcode.com/things/wiki/index.php?title=User_talk:Bunker">Using Applescript + <abbr title="Subversion">SVN</abbr></a> to keep Things in <abbr title="synchronisation">sync</abbr>. Certainly, a plist and launchd solution would work, but it seems slightly complicated and prone to breakage.</p>
+<p><a href="http://carlo.zottmann.org/" rel="colleague">Carlo Zottmann</a> first gave me the idea of using the excellent <a href="https://www.dropbox.com/referrals/NTE5NjgwOQ" title="Shameless referral whoring">Dropbox</a> service when he mentioned using <a href="http://agilewebsolutions.com/products/1Password">1Password</a>’s new <a href="http://www.switchersblog.com/2008/10/1password-29-br.html">Agile Keychain</a> in conjunction with it.</p>
+<p>Dropox is perfect for this type of activity:</p>
+<ul><li>It’s <a href="http://www.getdropbox.com/tour#2">quite</a> <a href="http://forums.getdropbox.com/topic.php?id=312&amp;replies=8#post-1354">secure</a>;</li>
+<li>The daemon listens for changes and uploads quietly in the background; and</li>
+<li>It’s available offline, since it works as just a folder in your home directory (<var>~/Dropbox</var>).</li>
+</ul><h3>A caveat</h3>
+<p>I’m not under the impression that Dropbox’s merge is anything to shake a stick at, so this technique will only work if you move from one computer to the other in sequence, and don’t have Things open in two places at the same time. Conflicts may occur in such a situation.</p>
+<h2>How do I do it?</h2>
+<p>Quite simple, actually. Cultured Code stores the database for Things in a per–user file called <var>Database.xml</var>, but after some fiddling I discovered that I couldn’t just symlink the file, as Things was blowing away the symlink and creating a new file each time. So some trickery was required. Make sure you shut down Things before you begin these steps, obviously.</p>
+<ul><li>First we make an appropriate folder on Dropbox (you just need to do this on your first computer, and obviously both computers need to have Dropbox installed):
+<pre><kbd>mkdir -p ~/Dropbox/Library</kbd></pre></li>
+<li>Then we hop into the folder just above where Things stores its database:
+<pre><kbd>cd ~/Library/Application\ Support/Cultured\ Code</kbd></pre></li>
+<li>We now move your existing Things database onto Dropbox (again, just on the first computer):
+<kbd>mv Things ~/Dropbox/Library/Things</kbd>, OR:</li>
+<li>If you’re on the second computer (at work, for example), you need to remove the <var>Things</var> folder:
+<pre><kbd>rm -rf Things</kbd></pre></li>
+<li>Now we link the Things folder to Dropbox:
+<pre><kbd>ln -s ~/Dropbox/Library/Things Things</kbd></pre></li>
+</ul><p>And you’re done! The symlink means that any changes made to <var>Database.xml</var> will be reflected on Dropbox almost immediately, and firing up each computer individually (but separately) will inherit those changes. Note that I’m using it on two computers, but you could theoretically use it on any number of computers, <strong>just as long as they’re not using Things simultaneously</strong>. That bold text is <em>very</em> important, pay attention please!</p>
+<h2>Consider this a feature request…</h2>
+<p>…that is, if any of the good folk from Cultured Code are listening!</p></div>    </body>
+</html>

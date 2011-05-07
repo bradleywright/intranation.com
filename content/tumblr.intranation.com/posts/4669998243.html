@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="4669998243" url="http://tumblr.intranation.com/post/4669998243" url-with-slug="http://tumblr.intranation.com/post/4669998243/sharing-files-with-virtual-machines-using-nfs" type="regular" date-gmt="2011-04-16 21:34:06 GMT" date="Sat, 16 Apr 2011 22:34:06" unix-timestamp="1302989646" format="html" reblog-key="GANocwF2" slug="sharing-files-with-virtual-machines-using-nfs"><regular-title>Sharing files with virtual machines using NFS</regular-title><regular-body>&lt;p&gt;In a &lt;a href="/post/766289691/development-virtual-machines-os-x-using-vmware-ubuntu"&gt;previous post&lt;/a&gt;, I sang the virtues of &lt;a href="http://www.vmware.com/products/fusion/overview.html"&gt;VMWare Fusion&lt;/a&gt;&amp;#8217;s shared folders feature, and the way it lets one share files from the host &lt;abbr title="Operating system"&gt;OS&lt;/abbr&gt; to the guest OS.&lt;/p&gt;
+
+&lt;p&gt;Folder sharing is a bit of a pain to install, especially because OS upgrades on the guest seem to break the guest tools installation. The solution is one of the oldest file sharing technologies there is: &lt;a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)"&gt;&lt;abbr title="Network File System"&gt;NFS&lt;/abbr&gt;&lt;/a&gt;. It&amp;#8217;s easy to set up, works on basically everything, and is solid as a rock. It also supports symlinks, which means you can sidestep &lt;a href="/post/766290952/why-i-dont-use-virtualbox"&gt;VirtualBox&amp;#8217;s issues with shared folders and symlinks&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The best bit is that once it&amp;#8217;s set up and works you can switch between any virtualisation technology you like (for example: I&amp;#8217;m now using VirtualBox at work so we can make better future use of &lt;a href="http://vagrantup.com/"&gt;Vagrant&lt;/a&gt;, but I use VMWare for Windows)—this works at the OS level so it&amp;#8217;ll just keep working.&lt;/p&gt;
+
+&lt;h2&gt;Configuration time&lt;/h2&gt;
+
+&lt;p&gt;This is the easy bit. First we export whichever folder we want to share from the host OS. In my case it&amp;#8217;s &lt;code&gt;~/Projects&lt;/code&gt;. Edit &lt;code&gt;/etc/exports&lt;/code&gt; as &lt;code&gt;sudo&lt;/code&gt; (this won&amp;#8217;t exist by default on OS X), and add the following line to it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/Users/bradleyw/Projects -mapall=501:20 -network 192.168.56.0 -mask 255.255.255.0&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first part is obviously the directory you want to share, and the &lt;code&gt;-network&lt;/code&gt; flag tells us which IP &lt;em&gt;range&lt;/em&gt; to share with. In my case my VM listens on &lt;code&gt;192.168.56.101&lt;/code&gt;, hence &lt;code&gt;192.168.56.0&lt;/code&gt;. The rest of the flags you can ignore.&lt;/p&gt;
+
+&lt;p&gt;Now we need to run a few commands in the OS X terminal to complete this side of the configuration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo nfsd checkexports&lt;/code&gt;
+&lt;code&gt;showmount -e&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If everything went well no errors should be reported and your exported directory should be printed to &lt;code&gt;stdout&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now on the guest OS, you first need to install the NFS software. On Debian and Ubuntu this is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install nfs-common&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you&amp;#8217;re on another distribution this is an exercise for the reader.&lt;/p&gt;
+
+&lt;p&gt;We can now configure &lt;code&gt;fstab&lt;/code&gt; so &lt;code&gt;mount&lt;/code&gt; knows what to do. As a super user, edit &lt;code&gt;/etc/fstab&lt;/code&gt;, and add the following line at the bottom:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;192.168.56.1:/Users/bradleyw/Projects /mnt/nfs nfs soft,intr,rsize=8192,wsize=8192 0 0&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The important bits to change are &lt;code&gt;192.168.56.1&lt;/code&gt;, which should be the IP your guest can see your host at (so the IP address your virtual machine uses to hit OS X), the path to your export, and the &lt;code&gt;/mnt/nfs&lt;/code&gt;, which can be anything you want. I use &lt;code&gt;/mnt/nfs&lt;/code&gt; as it seemed the right thing to do.&lt;/p&gt;
+
+&lt;p&gt;Note that you need to create &lt;code&gt;/mnt/nfs&lt;/code&gt; before proceeding: &lt;code mkdir&gt;.&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can attempt to mount the shared filesystem: &lt;code&gt;sudo mount /mnt/nfs&lt;/code&gt;. If no errors are reported, it&amp;#8217;s all good!&lt;/p&gt;
+
+&lt;p&gt;You should now be able to read and write from &lt;code&gt;/mnt/nfs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2&gt;My own workflow&lt;/h2&gt;
+
+&lt;p&gt;My own workflow with this is to have a case-insensitive disc image that&amp;#8217;s password protected automount on login (this is exported as &lt;code&gt;/Volumes/Smarkets&lt;/code&gt;). Then the Linux machine starts in headless mode, and because of NFS it&amp;#8217;s already mounted. So I&amp;#8217;m up and running very quickly after logging in, and the case-insensitive disc image gets around all the issues Python has when exporting from OS X to case-sensitive file systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://binaryclub.com/" rel="friend met colleague coworker"&gt;Hunter&lt;/a&gt; helped me a lot with some of the details here.&lt;/p&gt;</regular-body><tag>virtualisation</tag><tag>development</tag><tag>linux</tag></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:14 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">April 16, 2011, 10:34 pm</span>
+            
+        </div>
+        
+        <h1>Sharing files with virtual machines using NFS</h1><div><p>In a <a href="/post/766289691/development-virtual-machines-os-x-using-vmware-ubuntu">previous post</a>, I sang the virtues of <a href="http://www.vmware.com/products/fusion/overview.html">VMWare Fusion</a>&#8217;s shared folders feature, and the way it lets one share files from the host <abbr title="Operating system">OS</abbr> to the guest OS.</p>
+
+<p>Folder sharing is a bit of a pain to install, especially because OS upgrades on the guest seem to break the guest tools installation. The solution is one of the oldest file sharing technologies there is: <a href="http://en.wikipedia.org/wiki/Network_File_System_(protocol)"><abbr title="Network File System">NFS</abbr></a>. It&#8217;s easy to set up, works on basically everything, and is solid as a rock. It also supports symlinks, which means you can sidestep <a href="/post/766290952/why-i-dont-use-virtualbox">VirtualBox&#8217;s issues with shared folders and symlinks</a>.</p>
+
+<p>The best bit is that once it&#8217;s set up and works you can switch between any virtualisation technology you like (for example: I&#8217;m now using VirtualBox at work so we can make better future use of <a href="http://vagrantup.com/">Vagrant</a>, but I use VMWare for Windows)—this works at the OS level so it&#8217;ll just keep working.</p>
+
+<h2>Configuration time</h2>
+
+<p>This is the easy bit. First we export whichever folder we want to share from the host OS. In my case it&#8217;s <code>~/Projects</code>. Edit <code>/etc/exports</code> as <code>sudo</code> (this won&#8217;t exist by default on OS X), and add the following line to it:</p>
+
+<pre><code>/Users/bradleyw/Projects -mapall=501:20 -network 192.168.56.0 -mask 255.255.255.0</code></pre>
+
+<p>The first part is obviously the directory you want to share, and the <code>-network</code> flag tells us which IP <em>range</em> to share with. In my case my VM listens on <code>192.168.56.101</code>, hence <code>192.168.56.0</code>. The rest of the flags you can ignore.</p>
+
+<p>Now we need to run a few commands in the OS X terminal to complete this side of the configuration:</p>
+
+<pre><code>sudo nfsd checkexports</code>
+<code>showmount -e</code></pre>
+
+<p>If everything went well no errors should be reported and your exported directory should be printed to <code>stdout</code>.</p>
+
+<p>Now on the guest OS, you first need to install the NFS software. On Debian and Ubuntu this is:</p>
+
+<pre><code>sudo apt-get install nfs-common</code></pre>
+
+<p>If you&#8217;re on another distribution this is an exercise for the reader.</p>
+
+<p>We can now configure <code>fstab</code> so <code>mount</code> knows what to do. As a super user, edit <code>/etc/fstab</code>, and add the following line at the bottom:</p>
+
+<pre><code>192.168.56.1:/Users/bradleyw/Projects /mnt/nfs nfs soft,intr,rsize=8192,wsize=8192 0 0</code></pre>
+
+<p>The important bits to change are <code>192.168.56.1</code>, which should be the IP your guest can see your host at (so the IP address your virtual machine uses to hit OS X), the path to your export, and the <code>/mnt/nfs</code>, which can be anything you want. I use <code>/mnt/nfs</code> as it seemed the right thing to do.</p>
+
+<p>Note that you need to create <code>/mnt/nfs</code> before proceeding: <code mkdir>.</code></p>
+
+<p>Now we can attempt to mount the shared filesystem: <code>sudo mount /mnt/nfs</code>. If no errors are reported, it&#8217;s all good!</p>
+
+<p>You should now be able to read and write from <code>/mnt/nfs</code>.</p>
+
+<h2>My own workflow</h2>
+
+<p>My own workflow with this is to have a case-insensitive disc image that&#8217;s password protected automount on login (this is exported as <code>/Volumes/Smarkets</code>). Then the Linux machine starts in headless mode, and because of NFS it&#8217;s already mounted. So I&#8217;m up and running very quickly after logging in, and the case-insensitive disc image gets around all the issues Python has when exporting from OS X to case-sensitive file systems.</p>
+
+<p><a href="http://binaryclub.com/" rel="friend met colleague coworker">Hunter</a> helped me a lot with some of the details here.</p></div>    </body>
+</html>

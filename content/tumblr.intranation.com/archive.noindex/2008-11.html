@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3>" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:15 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="archive_body">        
+        <div class="post_meta">
+            <span class="timestamp">November 30, 2008, 7:53 pm</span>
+            <a class="permalink" href="../posts/766288989.html">#</a>
+        </div>
+        
+        <h1>Django Static Asset Management</h1><div><p>With <a href="http://github.com/">GitHub</a> <a href="http://morethanseven.net/2008/11/16/i-hearts-github-two/">gaining</a> <a href="http://dynamicflash.com/2008/11/do-it-in-public/">popularity</a> <a href="http://thecodetrain.co.uk/2008/11/why-git/">amongst</a> <a href="http://mikewest.org/2008/11/i-love-github">my</a> <a href="http://github.com/bradleywright/followers">peers</a>, open source projects are a dime–a–dozen. That’s not to say they’re not worthwhile (I’ve learned loads from <a href="http://marknormanfrancis.com/" rel="friend met colleague">Norm</a>&#8217;s <a href="http://github.com/norm/homedir/tree">homedir</a> project alone), but more that the difficulty and relative cost of establishing new projects has been dramatically reduced by GitHub.</p>
+<p>With that caveat in mind, I still think it’s worth mentioning my latest project: <a href="https://github.com/bradleywright/django-static-management/tree">Django Static Management</a>.</p>
+<h2>Code Management</h2>
+<p>Since <a href="http://developer.yahoo.com/yslow/">YSlow</a> was first introduced, an ongoing problem has been “how to manage your files in a YSlow friendly way?”. In <a href="http://answers.yahoo.com/">Answers</a>, the modern incarnation of which runs on <a href="http://www.symfony-project.org/">Symfony</a>, we solved this by using configuration to list the required <abbr title="Cascading Style Sheets">CSS</abbr> and <abbr title="JavaScript">JS</abbr> files, and then having a build script run at build time to compile and minify these files. I always found this to be the most elegant way of managing your files, as they’re all stored in a single place, in a format (<abbr title="Yet another Markup Language">YML</abbr>) that’s easily understood by even the most configuration–phobic front end developer.</p>
+<p>The benefit of storing the names of these files in one central place is twofold:</p>
+<ul><li>They’re visible to all developers on a project (and not buried somewhere in a template); and</li>
+<li>They’re easily accessible by automated scripts when creating a production version of a site (since YSlow preaches that we should combine our files into a single file to reduce HTTP overhead).</li>
+</ul><h2>Unified Approach</h2>
+<p><a href="http://www.djangoproject.com/">Django</a> itself, as my primary development environment these days, has no defined approach to handling static assets (and indeed the <a href="http://docs.djangoproject.com/en/dev/howto/static-files/#howto-static-files">documentation is quite vague concerning this</a>), so I figured as a developer in a fairly unique position (being both a Django developer and a fairly experienced front end developer), I would take it upon myself to solve this. For myself and my own preferred style, at the very least.</p>
+<p>The interface I wanted would provide all the tools required to build and run a website (including the often overlooked development aspect of making sites), and be easy to use.</p>
+<h2>Introducing Django Static Management</h2>
+<p>It has a bad name, but here’s <a href="http://github.com/bradleywright/django-static-management/tree">Django Static Management</a>. At the moment it’s very much a 0.1 release, but it’s robust enough that people can start using it on their development environments.</p>
+<p>All the documentation is <a href="http://github.com/bradleywright/django-static-management/tree">already included in the README</a>, so I won’t bore you with that here.</p>
+<h2>The future</h2>
+<p>One can see the future roadmap in the code itself, but to summarise:</p>
+<ul><li>Hooks for integration with build/compression scripts, like <a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a>, <a href="http://www.crockford.com/javascript/jsmin.html">JSMin</a>, or even Norm’s soon to be released (I hope) <a href="http://github.com/norm/p5-css-prepare/tree">p5-css-prepare</a>; and</li>
+    <li>Support for time-stamping filenames, to provide support for <a href="http://developer.yahoo.com/performance/rules.html#expires">far future expires headers</a>.</li>
+</ul><p>It’s a short list, but then I had a busy day, and to be honest the desired feature list is currently quite short.</p>
+<p>One reason this is a post on my site rather than just a GitHub project is that I’d like to draw attention and feature requests to the project over a wider audience than just my GitHub friends. I actually think this project will be relatively useful, but it’ll be more useful if people try and break it and feed back to me.</p></div>
+</body></html>

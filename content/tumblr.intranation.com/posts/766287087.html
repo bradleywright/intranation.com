@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="766287087" url="http://tumblr.intranation.com/post/766287087" url-with-slug="http://tumblr.intranation.com/post/766287087/ie-and-buttons" type="regular" date-gmt="2008-08-01 18:52:00 GMT" date="Fri, 01 Aug 2008 19:52:00" unix-timestamp="1217616720" format="html" reblog-key="VDBnvGOi" slug="ie-and-buttons"><regular-title>On IE and buttons</regular-title><regular-body>&lt;p&gt;
+    With regards to &lt;a href="http://allinthehead.com/" rel="acquaintance met colleague"&gt;Drew&lt;/a&gt;’s recent post &lt;a href="http://allinthehead.com/retro/330/coping-with-internet-explorers-mishandling-of-buttons"&gt;Internet Explorer’s mishandlings of &lt;code&gt;BUTTON&lt;/code&gt;s&lt;/a&gt;, I thought I would post a solution I came up with whilst serving at &lt;a href="http:/uk.yahoo.com"&gt;Yahoo!&lt;/a&gt; for the new &lt;a href="http://yanswersblog.com/index.php/archives/2008/07/31/make-your-answers-shine/"&gt;Ask/Answer flow&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;h2&gt;What’s the problem?&lt;/h2&gt;
+
+&lt;p&gt;
+    For those of you who’ve not read Drew’s above–linked post (you should, it explains the problem concisely), the issue can be broken down thusly:
+&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;&lt;code&gt;BUTTON&lt;/code&gt; elements are good to use for “Web 2.0” styling like rounded corners, because they allow elements to be nested inside them (in our case, empty &lt;code&gt;SPAN&lt;/code&gt;s or similar);&lt;/li&gt;
+    &lt;li&gt;Internet Explorer mis-handles the &lt;code&gt;BUTTON&lt;/code&gt;s by sending the entire contents (equivalent to &lt;code&gt;innerHTML&lt;/code&gt;) along to the server, rather than the defined &lt;code&gt;value&lt;/code&gt;;&lt;/li&gt;
+    &lt;li&gt;This means you need to fork your server side code to deal with the possibility of the content not being what you expect.&lt;/li&gt;
+&lt;/ul&gt;&lt;h2&gt;What’s the problem with Drew’s method?&lt;/h2&gt;
+
+&lt;p&gt;
+    Nothing major, except that it all depends on the way he “&lt;q&gt;(throws) the &lt;code&gt;SPAN&lt;/code&gt; off-screen with CSS&lt;/q&gt;”. If he’s just using off–left, &lt;a href="http://www.accessibilitytips.com/2008/03/04/positioning-content-offscreen/"&gt;screen readers will still be able to see the content&lt;/a&gt;, which in his example is “&lt;q&gt;ABC123&lt;/q&gt;”: whilst this is only present for the example given, could theoretically be anything. Either way it’s unlikely to be relevant to a screen–reader (or a search crawler, when it comes down to it).&lt;/p&gt;
+
+&lt;p&gt;As I stated, it’s very minor nit–picking. But what is the Internet for if not to nit–pick (or to &lt;a href="http://en.wikipedia.org/wiki/Godwin's_law"&gt;call people Nazis&lt;/a&gt;)?&lt;/p&gt;
+
+&lt;h2&gt;So what’s my solution?&lt;/h2&gt;
+
+&lt;p&gt;Despite Drew being entirely correct when he said that &lt;a href="http://allinthehead.com/retro/330/coping-with-internet-explorers-mishandling-of-buttons#c004656"&gt;&lt;q&gt;a solution that relies on JavaScript isn’t a solution&lt;/q&gt;&lt;/a&gt;, I’m going to do one anyway. Key features include:&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;Graceful degradation: in all browsers without Javascript enabled regular &lt;code&gt;input type="submit"&lt;/code&gt; elements are used;&lt;/li&gt;
+    &lt;li&gt;Allows for extra styling: spurious (and quite horrible) extra &lt;code&gt;span&lt;/code&gt; elements are inserted, allowing for bonus styling hooks; and&lt;/li&gt;
+    &lt;li&gt;Accessibility is enhanced: since Internet Explorer famously has &lt;a href="http://failblog.com"&gt;fail&lt;/a&gt; with regards to &lt;a href="http://www.w3.org/TR/CSS21/selector.html#pseudo-class-selectors"&gt;CSS pseudo-class&lt;/a&gt; selectors, and given these are essential for keyboard users (to simulate mouseover etc.), we add in some event handling to enhance the buttons for IE mouse/keyboard users.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;
+    Note that no &lt;abbr title="Cascading Style Sheets"&gt;CSS&lt;/abbr&gt; is provided: this is left as an exercise for the reader. Also note that it’s written for a site using the &lt;a href="http://developer.yahoo.com/yui/"&gt;&lt;abbr title="Yahoo! User Interface library"&gt;YUI&lt;/abbr&gt; library&lt;/a&gt;, which is the front–end framework of choice where this code was originally written.
+&lt;/p&gt;
+
+&lt;p&gt;
+    Also bear in mind this this comes with a &lt;a href="#the-big-caveat"&gt;really really big caveat&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;pre class="html"&gt;
+&amp;lt;form action="" method="post"&amp;gt;
+    &amp;lt;-- other FORM fields before (remembering our LABELs and FIELDSETs!!)--&amp;gt;
+    &amp;lt;div&amp;gt;
+        &amp;lt;input type="submit" class="cta" name="my-submit" value="Save Application"&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/form&amp;gt;
+
+&amp;lt;!-- we need the YUI basics --&amp;gt;
+&amp;lt;script type="text/javascript"
+ src="http://yui.yahooapis.com/2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"&amp;gt;&amp;lt;/script&amp;gt;
+ 
+&amp;lt;script type="text/javascript"&amp;gt;
+// namespaced to "EUropean User Interface"
+YAHOO.namespace('EU.UI');
+// CTA stands for "call to action", a standard Yahoo! term for a rounded corner button
+YAHOO.EU.UI.cta = function() {
+    function fixSubmit(e) {
+        // this function is only fired for browsers which don't understand 
+        // button type="submit", so we're okay to proceed without browser 
+        // checking
+        
+        // clobber default behaviour
+        YAHOO.util.Event.preventDefault(e);
+        
+        var form = this.form;
+        // IE will submit all buttons at once, so kill/disable the ones we didn't click
+        var els = form.getElementsByTagName('button');
+        if (els.length &amp;gt; 0) {
+            for (var i=0, l=els.length; i&amp;lt;l; i++) {
+                // check if it's the same element--name isn't reliable as 
+                // there could be multiple forms with the same named element
+                if (els[i] !== this) {
+                    // note this will cause a "flash" of greyed out buttons
+                    els[i].disabled = true;
+                }
+            }
+        }
+        
+        // now that all buttons except the one that was clicked are disabled, 
+        // send the form along with just the button clicked
+        form.submit();
+    }
+    return {
+        init : function() {
+            var els = YAHOO.util.Dom.getElementsByClassName('cta', 'input');
+            // these could be anything--just use them as styling hooks
+            var startContent = '&amp;lt;span&amp;gt;&amp;lt;span&amp;gt;&amp;lt;span&amp;gt;&amp;lt;span&amp;gt;';
+            var endContent = '&amp;lt;\/span&amp;gt;&amp;lt;\/span&amp;gt;&amp;lt;\/span&amp;gt;&amp;lt;\/span&amp;gt;';
+            if (els.length &amp;gt; 0) {
+                for (var i=0, l=els.length; i&amp;lt;l; i++) {
+                    var el = els[i];
+                    if (el.type.toLowerCase() === 'submit') {
+                        // do transform
+                        var newCta = document.createElement('div');
+
+                        // add additional classes ('secondary', 'right' etc.)
+                        newCta.className = el.className;
+
+                        var button = document.createElement('button');
+
+                        button.name     = el.name;
+                        button.value    = el.value;
+                        button.innerHTML = startContent + el.value + endContent;
+                        newCta.appendChild(button);
+                        el.parentNode.replaceChild(newCta, el);
+
+                        // fix the submit
+                        try {
+                            button.type = 'submit';
+                        }
+                        // IE errors out on the above, so we now know we're dealing with IE
+                        catch (err) {
+                            YAHOO.util.Event.on(button, 'click', fixSubmit);  
+                        }
+                        // fix :focus and :active pseudo-class for all IE for keyboard navigation
+                        if (YAHOO.env.ua.ie &amp;gt; 0) {
+                            YAHOO.util.Event.on(button, 'focus', function(e) {
+                                YAHOO.util.Dom.addClass(this, 'hover');
+                            });
+                            YAHOO.util.Event.on(button, 'blur', function(e) {
+                                YAHOO.util.Dom.removeClass(this, 'hover');
+                            });
+                            YAHOO.util.Event.on(button, 'click', function(e) {
+                                YAHOO.util.Dom.addClass(this, 'active');
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+}();
+// above () returns the function immediately, causing the inner functions to be "private"
+
+// fire public init method on DOMReady event
+YAHOO.util.Event.onDOMReady(YAHOO.EU.UI.cta.init);
+&amp;lt;/script&amp;gt;&lt;/pre&gt;
+
+&lt;h2 id="the-big-caveat"&gt;“You use(d) Javascript for presentation you bad bad man”&lt;/h2&gt;
+
+&lt;p&gt;Yes I do. Well, I did (I only did this type of thing once). Glad you’ve been paying attention. I believe I’m okay doing this for a few reasons (so listen closely):&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;The &lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt; remains un–polluted. I believe this to be of prime important, as HTML is the only part of the web standards “trinity” (HTML, &lt;abbr title="Cascading Style Sheets"&gt;CSS&lt;/abbr&gt;, and Javascript) that is always delivered to all user agents;&lt;/li&gt;
+    &lt;li&gt;The Javascript used does not detract from the accessibility in any way; and&lt;/li&gt;
+    &lt;li&gt;Sometimes the presentation is important enough for your audience or goal that you need to do things like this. Call it an over–optimisation in the name of: accessibility over separation–of–concerns purity, and brand/design requirements.&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;
+    You may, as is your wont, disagree. That’s okay, but before I get flamed (which I can’t, given that I still don’t have comments enabled), I want it to be known that this script was produced under the above caveats. As usual, &lt;abbr title="Your Mileage May Vary"&gt;YMMV&lt;/abbr&gt;. Just don’t go doing this type of thing often.
+&lt;/p&gt;</regular-body></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:15 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">August 1, 2008, 7:52 pm</span>
+            
+        </div>
+        
+        <h1>On IE and buttons</h1><div><p>
+    With regards to <a href="http://allinthehead.com/" rel="acquaintance met colleague">Drew</a>’s recent post <a href="http://allinthehead.com/retro/330/coping-with-internet-explorers-mishandling-of-buttons">Internet Explorer’s mishandlings of <code>BUTTON</code>s</a>, I thought I would post a solution I came up with whilst serving at <a href="http:/uk.yahoo.com">Yahoo!</a> for the new <a href="http://yanswersblog.com/index.php/archives/2008/07/31/make-your-answers-shine/">Ask/Answer flow</a>.
+</p>
+
+<h2>What’s the problem?</h2>
+
+<p>
+    For those of you who’ve not read Drew’s above–linked post (you should, it explains the problem concisely), the issue can be broken down thusly:
+</p>
+
+<ul><li><code>BUTTON</code> elements are good to use for “Web 2.0” styling like rounded corners, because they allow elements to be nested inside them (in our case, empty <code>SPAN</code>s or similar);</li>
+    <li>Internet Explorer mis-handles the <code>BUTTON</code>s by sending the entire contents (equivalent to <code>innerHTML</code>) along to the server, rather than the defined <code>value</code>;</li>
+    <li>This means you need to fork your server side code to deal with the possibility of the content not being what you expect.</li>
+</ul><h2>What’s the problem with Drew’s method?</h2>
+
+<p>
+    Nothing major, except that it all depends on the way he “<q>(throws) the <code>SPAN</code> off-screen with CSS</q>”. If he’s just using off–left, <a href="http://www.accessibilitytips.com/2008/03/04/positioning-content-offscreen/">screen readers will still be able to see the content</a>, which in his example is “<q>ABC123</q>”: whilst this is only present for the example given, could theoretically be anything. Either way it’s unlikely to be relevant to a screen–reader (or a search crawler, when it comes down to it).</p>
+
+<p>As I stated, it’s very minor nit–picking. But what is the Internet for if not to nit–pick (or to <a href="http://en.wikipedia.org/wiki/Godwin's_law">call people Nazis</a>)?</p>
+
+<h2>So what’s my solution?</h2>
+
+<p>Despite Drew being entirely correct when he said that <a href="http://allinthehead.com/retro/330/coping-with-internet-explorers-mishandling-of-buttons#c004656"><q>a solution that relies on JavaScript isn’t a solution</q></a>, I’m going to do one anyway. Key features include:</p>
+
+<ul><li>Graceful degradation: in all browsers without Javascript enabled regular <code>input type="submit"</code> elements are used;</li>
+    <li>Allows for extra styling: spurious (and quite horrible) extra <code>span</code> elements are inserted, allowing for bonus styling hooks; and</li>
+    <li>Accessibility is enhanced: since Internet Explorer famously has <a href="http://failblog.com">fail</a> with regards to <a href="http://www.w3.org/TR/CSS21/selector.html#pseudo-class-selectors">CSS pseudo-class</a> selectors, and given these are essential for keyboard users (to simulate mouseover etc.), we add in some event handling to enhance the buttons for IE mouse/keyboard users.</li>
+</ul><p>
+    Note that no <abbr title="Cascading Style Sheets">CSS</abbr> is provided: this is left as an exercise for the reader. Also note that it’s written for a site using the <a href="http://developer.yahoo.com/yui/"><abbr title="Yahoo! User Interface library">YUI</abbr> library</a>, which is the front–end framework of choice where this code was originally written.
+</p>
+
+<p>
+    Also bear in mind this this comes with a <a href="#the-big-caveat">really really big caveat</a>.
+</p>
+
+<pre class="html">
+&lt;form action="" method="post"&gt;
+    &lt;-- other FORM fields before (remembering our LABELs and FIELDSETs!!)--&gt;
+    &lt;div&gt;
+        &lt;input type="submit" class="cta" name="my-submit" value="Save Application"&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+
+&lt;!-- we need the YUI basics --&gt;
+&lt;script type="text/javascript"
+ src="http://yui.yahooapis.com/2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"&gt;&lt;/script&gt;
+ 
+&lt;script type="text/javascript"&gt;
+// namespaced to "EUropean User Interface"
+YAHOO.namespace('EU.UI');
+// CTA stands for "call to action", a standard Yahoo! term for a rounded corner button
+YAHOO.EU.UI.cta = function() {
+    function fixSubmit(e) {
+        // this function is only fired for browsers which don't understand 
+        // button type="submit", so we're okay to proceed without browser 
+        // checking
+        
+        // clobber default behaviour
+        YAHOO.util.Event.preventDefault(e);
+        
+        var form = this.form;
+        // IE will submit all buttons at once, so kill/disable the ones we didn't click
+        var els = form.getElementsByTagName('button');
+        if (els.length &gt; 0) {
+            for (var i=0, l=els.length; i&lt;l; i++) {
+                // check if it's the same element--name isn't reliable as 
+                // there could be multiple forms with the same named element
+                if (els[i] !== this) {
+                    // note this will cause a "flash" of greyed out buttons
+                    els[i].disabled = true;
+                }
+            }
+        }
+        
+        // now that all buttons except the one that was clicked are disabled, 
+        // send the form along with just the button clicked
+        form.submit();
+    }
+    return {
+        init : function() {
+            var els = YAHOO.util.Dom.getElementsByClassName('cta', 'input');
+            // these could be anything--just use them as styling hooks
+            var startContent = '&lt;span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;';
+            var endContent = '&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;';
+            if (els.length &gt; 0) {
+                for (var i=0, l=els.length; i&lt;l; i++) {
+                    var el = els[i];
+                    if (el.type.toLowerCase() === 'submit') {
+                        // do transform
+                        var newCta = document.createElement('div');
+
+                        // add additional classes ('secondary', 'right' etc.)
+                        newCta.className = el.className;
+
+                        var button = document.createElement('button');
+
+                        button.name     = el.name;
+                        button.value    = el.value;
+                        button.innerHTML = startContent + el.value + endContent;
+                        newCta.appendChild(button);
+                        el.parentNode.replaceChild(newCta, el);
+
+                        // fix the submit
+                        try {
+                            button.type = 'submit';
+                        }
+                        // IE errors out on the above, so we now know we're dealing with IE
+                        catch (err) {
+                            YAHOO.util.Event.on(button, 'click', fixSubmit);  
+                        }
+                        // fix :focus and :active pseudo-class for all IE for keyboard navigation
+                        if (YAHOO.env.ua.ie &gt; 0) {
+                            YAHOO.util.Event.on(button, 'focus', function(e) {
+                                YAHOO.util.Dom.addClass(this, 'hover');
+                            });
+                            YAHOO.util.Event.on(button, 'blur', function(e) {
+                                YAHOO.util.Dom.removeClass(this, 'hover');
+                            });
+                            YAHOO.util.Event.on(button, 'click', function(e) {
+                                YAHOO.util.Dom.addClass(this, 'active');
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+}();
+// above () returns the function immediately, causing the inner functions to be "private"
+
+// fire public init method on DOMReady event
+YAHOO.util.Event.onDOMReady(YAHOO.EU.UI.cta.init);
+&lt;/script&gt;</pre>
+
+<h2 id="the-big-caveat">“You use(d) Javascript for presentation you bad bad man”</h2>
+
+<p>Yes I do. Well, I did (I only did this type of thing once). Glad you’ve been paying attention. I believe I’m okay doing this for a few reasons (so listen closely):</p>
+
+<ul><li>The <abbr title="HyperText Markup Language">HTML</abbr> remains un–polluted. I believe this to be of prime important, as HTML is the only part of the web standards “trinity” (HTML, <abbr title="Cascading Style Sheets">CSS</abbr>, and Javascript) that is always delivered to all user agents;</li>
+    <li>The Javascript used does not detract from the accessibility in any way; and</li>
+    <li>Sometimes the presentation is important enough for your audience or goal that you need to do things like this. Call it an over–optimisation in the name of: accessibility over separation–of–concerns purity, and brand/design requirements.</li>
+</ul><p>
+    You may, as is your wont, disagree. That’s okay, but before I get flamed (which I can’t, given that I still don’t have comments enabled), I want it to be known that this script was produced under the above caveats. As usual, <abbr title="Your Mileage May Vary">YMMV</abbr>. Just don’t go doing this type of thing often.
+</p></div>    </body>
+</html>

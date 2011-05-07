@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <!-- BEGIN TUMBLR XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <post id="4000317859" url="http://tumblr.intranation.com/post/4000317859" url-with-slug="http://tumblr.intranation.com/post/4000317859/posterous-customer-service-do-it-better" type="regular" date-gmt="2011-03-21 09:30:00 GMT" date="Mon, 21 Mar 2011 09:30:00" unix-timestamp="1300699800" format="html" reblog-key="u07ie6bz" slug="posterous-customer-service-do-it-better"><regular-title>Posterous's idea of customer service, and where I differ</regular-title><regular-body>&lt;p&gt;I&amp;#8217;ve been dabbling with &lt;a href="http://posterous.com/"&gt;Posterous&lt;/a&gt; as a potential way of mitigating Tumblr&amp;#8217;s recent downtime issues.&lt;/p&gt;
+
+&lt;p&gt;The &lt;abbr title="Too long; didn't read"&gt;tl;dr&lt;/abbr&gt; version is that I didn&amp;#8217;t like their service, and suggest some &lt;a href="#improvements"&gt;improvements.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;My experience with Posterous&lt;/h2&gt;
+
+&lt;p&gt;After importing my Tumblr blog into their system (which was all very smooth), I tried to edit a post and remove it, using one of their combo buttons:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://s3.intranation.com/blog/posterous-customer-service/posterous-combo-button.png" alt="Combo button" width="75" height="33"/&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, in both Safari and Chrome (so WebKit, basically), their Javascript is broken. It fails, and then fails to clobber the event propagation, so the page reloads (as obviously, not being progressively enhanced, all their links are empty).&lt;/p&gt;
+
+&lt;p&gt;A cursory look in my console shows really basic errors like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uncaught TypeError: Cannot call method 'addClassName' of null&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Uncaught TypeError: Property '$' of object [object DOMWindow] is not a function&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, being the responsible developer I am, I write into them with a bug report (this is on January 29, almost 2 months ago):&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Every time I click the &amp;#8220;Edit | [down arrow]&amp;#8221; button (the down arrow specifically), the page goes to a blank page. I assume this is because the JS is broken so you&amp;#8217;re not cancelling the click event on the link. I&amp;#8217;m using Safari 5.0.3 on Snow Leopard.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Not the most gracious email, I&amp;#8217;m sure we can all agree, but then again this also seems like the kind of basic error that shouldn&amp;#8217;t happen in the first place.&lt;/p&gt;
+
+&lt;p&gt;Yesterday, on March 20th (almost 2 months after submitting the error report), I get the following response from Posterous:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Hello Brad,&lt;/p&gt;
+
+&lt;p&gt;Should you still be experience the issue you emailed us about, try clearing safari&amp;#8217;s cache and cookies and trying again, or using another browser.&lt;/p&gt;
+
+&lt;p&gt;Sorry for the delayed response,&lt;/p&gt;
+
+&lt;p&gt;Theodore&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;I mean, what? This is a fundamentally broken part of the site, and the best they can tell is is:&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;They haven&amp;#8217;t tried verifying that the bug still exists (or even existed in the first place);&lt;/li&gt;
+&lt;li&gt;They certainly haven&amp;#8217;t tried to fix it; and&lt;/li&gt;
+&lt;li&gt;Their solution is to clear everything or use another browser.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;And I waited two months for that? As a professional developer it&amp;#8217;s my educated opinion that the errors I describe above are easy to notice and probably easy to fix. And they can&amp;#8217;t even be bothered checking them.&lt;/p&gt;
+
+&lt;p&gt;No thanks Posterous, I&amp;#8217;ll be sticking where I am for now.&lt;/p&gt;
+
+&lt;h2 id="improvements"&gt;What I would have done&lt;/h2&gt;
+
+&lt;p&gt;At &lt;a href="http://smarkets.com"&gt;Smarkets&lt;/a&gt; customer service is a part of our business that we take very seriously. I would have responded roughly as follows:&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;Reply within a day, telling the customer we&amp;#8217;ll look into it, and apologise for the inconvenience they&amp;#8217;re experiencing (note that this is mostly a form letter, and thus is very easy to reply with);&lt;/li&gt;
+&lt;li&gt;Work out if there&amp;#8217;s actually a bug:&lt;ul&gt;&lt;li&gt;If there is, file it, and schedule a fix; or&lt;/li&gt;
+    &lt;li&gt;If not, work out why the user is experiencing it anyway.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Reply to the user with either your explanation for what they might be doing wrong, and find out if they can give you more information; or&lt;/li&gt;
+&lt;li&gt;Tell them when they can expect a fix, as you&amp;#8217;ve found the bug. Give them some kudos in the email for finding the bug for them.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;At a startup, every customer is valuable and should be treated like they&amp;#8217;re important and that their opinion matters. These are trivial things to get right, and prevent long-winded disgruntled blog posts like this.&lt;/p&gt;</regular-body><tag>startups</tag><tag>posterous</tag><tag>smarkets</tag></post>
+
+        END TUMBLR XML -->
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:14 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="regular_body">
+                
+        <div class="post_meta">
+            <span class="timestamp">March 21, 2011, 9:30 am</span>
+            
+        </div>
+        
+        <h1>Posterous&#039;s idea of customer service, and where I differ</h1><div><p>I&#8217;ve been dabbling with <a href="http://posterous.com/">Posterous</a> as a potential way of mitigating Tumblr&#8217;s recent downtime issues.</p>
+
+<p>The <abbr title="Too long; didn't read">tl;dr</abbr> version is that I didn&#8217;t like their service, and suggest some <a href="#improvements">improvements.</a></p>
+
+<h2>My experience with Posterous</h2>
+
+<p>After importing my Tumblr blog into their system (which was all very smooth), I tried to edit a post and remove it, using one of their combo buttons:</p>
+
+<p><img src="http://s3.intranation.com/blog/posterous-customer-service/posterous-combo-button.png" alt="Combo button" width="75" height="33"/></p>
+
+<p>Unfortunately, in both Safari and Chrome (so WebKit, basically), their Javascript is broken. It fails, and then fails to clobber the event propagation, so the page reloads (as obviously, not being progressively enhanced, all their links are empty).</p>
+
+<p>A cursory look in my console shows really basic errors like:</p>
+
+<pre><code>Uncaught TypeError: Cannot call method 'addClassName' of null</code></pre>
+
+<p>or:</p>
+
+<pre><code>Uncaught TypeError: Property '$' of object [object DOMWindow] is not a function</code></pre>
+
+<p>Now, being the responsible developer I am, I write into them with a bug report (this is on January 29, almost 2 months ago):</p>
+
+<blockquote><p>Every time I click the &#8220;Edit | [down arrow]&#8221; button (the down arrow specifically), the page goes to a blank page. I assume this is because the JS is broken so you&#8217;re not cancelling the click event on the link. I&#8217;m using Safari 5.0.3 on Snow Leopard.</p></blockquote>
+
+<p>Not the most gracious email, I&#8217;m sure we can all agree, but then again this also seems like the kind of basic error that shouldn&#8217;t happen in the first place.</p>
+
+<p>Yesterday, on March 20th (almost 2 months after submitting the error report), I get the following response from Posterous:</p>
+
+<blockquote><p>Hello Brad,</p>
+
+<p>Should you still be experience the issue you emailed us about, try clearing safari&#8217;s cache and cookies and trying again, or using another browser.</p>
+
+<p>Sorry for the delayed response,</p>
+
+<p>Theodore</p></blockquote>
+
+<p>I mean, what? This is a fundamentally broken part of the site, and the best they can tell is is:</p>
+
+<ul><li>They haven&#8217;t tried verifying that the bug still exists (or even existed in the first place);</li>
+<li>They certainly haven&#8217;t tried to fix it; and</li>
+<li>Their solution is to clear everything or use another browser.</li></ul><p>And I waited two months for that? As a professional developer it&#8217;s my educated opinion that the errors I describe above are easy to notice and probably easy to fix. And they can&#8217;t even be bothered checking them.</p>
+
+<p>No thanks Posterous, I&#8217;ll be sticking where I am for now.</p>
+
+<h2 id="improvements">What I would have done</h2>
+
+<p>At <a href="http://smarkets.com">Smarkets</a> customer service is a part of our business that we take very seriously. I would have responded roughly as follows:</p>
+
+<ul><li>Reply within a day, telling the customer we&#8217;ll look into it, and apologise for the inconvenience they&#8217;re experiencing (note that this is mostly a form letter, and thus is very easy to reply with);</li>
+<li>Work out if there&#8217;s actually a bug:<ul><li>If there is, file it, and schedule a fix; or</li>
+    <li>If not, work out why the user is experiencing it anyway.</li>
+</ul></li>
+<li>Reply to the user with either your explanation for what they might be doing wrong, and find out if they can give you more information; or</li>
+<li>Tell them when they can expect a fix, as you&#8217;ve found the bug. Give them some kudos in the email for finding the bug for them.</li></ul><p>At a startup, every customer is valuable and should be treated like they&#8217;re important and that their opinion matters. These are trivial things to get right, and prevent long-winded disgruntled blog posts like this.</p></div>    </body>
+</html>

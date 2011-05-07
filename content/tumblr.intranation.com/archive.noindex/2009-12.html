@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta name="generator" content="Tumblr Backup 0.3>" />
+    	<meta name="backup-date" content="Sat, 07 May 11 14:51:14 -0400" />
+    	<link rel="stylesheet" href="../style.css"/>
+    	<link rel="icon" href="../avatar.png"/>
+    </head>
+    <body class="archive_body">        
+        <div class="post_meta">
+            <span class="timestamp">December 23, 2009, 9:51 pm</span>
+            <a class="permalink" href="../posts/297360001.html">#</a>
+        </div>
+        
+        <object width="400" height="336"><param name="movie" value="http://www.youtube.com/v/3DtiTxg70gI&amp;rel=0&amp;egm=0&amp;showinfo=0&amp;fs=1"></param><param name="wmode" value="transparent"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.youtube.com/v/3DtiTxg70gI&amp;rel=0&amp;egm=0&amp;showinfo=0&amp;fs=1" type="application/x-shockwave-flash" width="400" height="336" allowFullScreen="true" wmode="transparent"></embed></object><p>The new Mass Effect 2 trailer is fantastic. Very happy I pre-ordered this one, as I loved the first.</p>        
+        <div class="post_meta">
+            <span class="timestamp">December 23, 2009, 2:15 pm</span>
+            <a class="permalink" href="../posts/296819404.html">#</a>
+        </div>
+        
+        <p><a class="link" href="http://www.guardian.co.uk/environment/2009/dec/22/copenhagen-climate-change-mark-lynas">According to the Guardian, China scuttled Copenhagen</a></p> <div><p>This is an incredible story if true. An absolutely mind-blowing piece of journalism.</p></div>        
+        <div class="post_meta">
+            <span class="timestamp">December 23, 2009, 9:20 am</span>
+            <a class="permalink" href="../posts/296568492.html">#</a>
+        </div>
+        
+        <p><a href="http://www.informationisbeautiful.net/visualizations/climate-change-deniers-vs-the-consensus/"><img src="../images/296568492.gif"/></a></p><p>A truly epic summary of the global warming debate visualised. From <a href="http://www.informationisbeautiful.net/">Information is beautiful</a>.</p>        
+        <div class="post_meta">
+            <span class="timestamp">December 23, 2009, 8:45 am</span>
+            <a class="permalink" href="../posts/296533665.html">#</a>
+        </div>
+        
+        <div class="quote">&ldquo;The first thing you will need to get started with Emacs is a beard.&rdquo;</div><div>&mdash; <a href="http://twitter.com/wilhelmbierbaum/status/6936568390">Wilhelm Bierbaum</a> (via <a href="http://www.kungfugrippe.com/" class="tumblr_blog">merlin</a>)</div>        
+        <div class="post_meta">
+            <span class="timestamp">December 20, 2009, 7:54 pm</span>
+            <a class="permalink" href="../posts/766290325.html">#</a>
+        </div>
+        
+        <h1>Python virtualenv quickstart with Django</h1><div><p>One of the solutions to the <a href="http://jessenoller.com/2009/07/17/trapped-in-python-package-send-food/">ghetto of Python package management</a> is to use a sand-boxed Python install like <a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>. This is the very same technique we use at <a href="http://smarkets.com/">Smarkets</a> to simultaneously run <a href="http://pylonshq.com/">Pylons</a> and <a href="http://djangoproject.com/">Django</a> alongside each other on a single server.</p>
+<p>This post is briefly about how to get up and running in a few minutes using virtualenv and Django.</p>
+<h2>Install virtualenv</h2>
+<p>Installing virtualenv is easy on a Linux or Mac system, but the instructions that follow are Linux (Ubuntu, actually) specific. First you&#8217;ll need setuptools:</p>
+<pre><kbd>sudo apt-get install python-setuptools</kbd></pre>
+<p>Then we can <kbd>easy_install</kbd> virtualenv:</p>
+<pre><kbd>sudo easy_install virtualenv</kbd></pre>
+<p>We need to use <kbd>sudo</kbd> here because it has to install to a global location. Don’t worry, this is the last time we’ll need to do something as <var>root</var>.</p>
+<h2>Create your virtualenv</h2>
+<p><kbd>cd</kbd> to wherever it is you keep your projects (for me, in <var>~/src</var>), and run:</p>
+<pre><kbd>virtualenv --no-site-packages venv</kbd></pre>
+<p>In this instance I’ve chosen <var>venv</var> as the name for my virtual environment. The <var>&#8212;no-site-packages</var> command tells virtualenv not to symlink the global site packages into my local environment, just take the Python standard library. This is important, because it helps us avoid the dependency difficulties mentioned above.</p>
+<p>At this stage you might want to add <var>venv</var> to your list of ignored files, as you don’t want it to be committed to source control:</p>
+<pre><kbd>echo "venv" &gt;&gt; .gitignore</kbd></pre>
+<h2>Installing Django</h2>
+<p>Now, the trick with virtualenv is that it creates its own Python and easy_install binaries, which means you can install/run things specifically in your environment. Let’s install Django:</p>
+<pre><kbd>./venv/bin/easy_install django</kbd></pre>
+<p>And it’s done. easy. You might also want to install the MySQL bindings and <a href="http://ipython.scipy.org/moin/">IPython</a> for ease of use:</p>
+<pre><kbd>./venv/bin/easy_install ipython python-mysql</kbd></pre>
+<p>To start a new Django project, you’ll note that a <var>django-admin.py</var> file will have been installed for you in the environment:</p>
+<pre><kbd>./venv/bin/django-admin.py startproject myapp</kbd></pre>
+<p>Obviously you can skip this step if you have an existing Django project.</p>
+<h2>Running Django</h2>
+<p>Now the last step, which is probably obvious by now, is to run Django’s runserver with the virtual Python binary:</p>
+<pre><kbd>cd myapp</kbd>
+<kbd>../venv/bin/python manage.py runserver 0.0.0.0:8000</kbd></pre>
+<p>And you’re away!</p>
+<h2>Closing</h2>
+<p>Just make sure whenever you need to add another package that you install it in the virtualenv, and not in the global packages directory. If you want to deploy using virtualenv, here are <a href="http://code.google.com/p/modwsgi/wiki/VirtualEnvironments">some instructions for using mod_wsgi</a> with virtualenvs.</p></div>        
+        <div class="post_meta">
+            <span class="timestamp">December 11, 2009, 7:11 pm</span>
+            <a class="permalink" href="../posts/279221253.html">#</a>
+        </div>
+        
+        <p><a href="http://www.yahnyinlondon.com/post/279215145/today-i-became-a-british-citizen-here-is-me"><img src="../images/279221253.jpg"/></a></p><p><a href="http://www.yahnyinlondon.com/post/279215145/today-i-became-a-british-citizen-here-is-me" class="tumblr_blog">yahnyinlondon</a>:</p>
+
+<blockquote><p>Today, I became a British Citizen. Here is me receiving my certificate of naturalisation from the former speaker of Hackney. She gave a great speech to all the new citizens and guests, plus check out those fresh trainers underneath her gown. This is how we roll in Hackney.</p></blockquote>
+
+<p>I&#8217;m very proud of <a href="http://yahnyinlondon.com">Amanda</a> for becoming a British citizen today. The ceremony itself was actually quite nice—very humble and simple, with a minimum of fuss. I learned that out of the two pledges (one non–religious, one for &#8220;Almighty God&#8221;), the non–religious is the default so as not to cause any friction with religious citizens–to–be who might not have read the application correctly.</p>        
+        <div class="post_meta">
+            <span class="timestamp">December 9, 2009, 9:22 pm</span>
+            <a class="permalink" href="../posts/276532810.html">#</a>
+        </div>
+        
+        <p><a class="link" href="http://www.ashmaurya.com/2009/12/achieving-flow-in-a-lean-startup/">Achieving flow in a startup</a></p> <div><p>Fantastic article about some of the challenges (and solutions) involved in time management within startups.</p></div>        
+        <div class="post_meta">
+            <span class="timestamp">December 9, 2009, 11:24 am</span>
+            <a class="permalink" href="../posts/275998295.html">#</a>
+        </div>
+        
+        <p><a class="link" href="http://www.georgehart.com/bagel/bagel.html">Mobius bagel (more surface area for cream cheese)</a></p>         
+        <div class="post_meta">
+            <span class="timestamp">December 7, 2009, 11:46 am</span>
+            <a class="permalink" href="../posts/273096580.html">#</a>
+        </div>
+        
+        <p><a class="link" href="http://simonwillison.net/static/2009/djugl-december.html">What&#039;s coming in Django 1.2</a></p> <div><p>The presentation Simon gave at DJUGL. Most interesting for me, specifically with regards to <a href="http://smarkets.com/">Smarkets</a>, is the logging and <abbr title="Cross Site Request Forgery">CSRF</abbr> work. Receiving hundreds of emails overnight when the site has issues isn’t fun.</p></div>        
+        <div class="post_meta">
+            <span class="timestamp">December 1, 2009, 2:26 pm</span>
+            <a class="permalink" href="../posts/264929544.html">#</a>
+        </div>
+        
+        <p><a class="link" href="http://www.buzzmachine.com/2009/11/28/the-new-divide-walled-v-open/">The new divide: Walled v. open</a></p> <div><p>The excellent Jeff Jarvis on the divide between walled/open media strategies, particularly with regards to my countryman Rupert Murdoch.</p></div>
+</body></html>
