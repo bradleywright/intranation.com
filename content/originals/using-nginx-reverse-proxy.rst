@@ -304,11 +304,11 @@ This article is based on the hard work of those awesome people over at Slicehost
 
 __ http://www.slicehost.com/
 
-* `Installing Nginx from source`_
-* `A better way of stopping and starting Nginx`_
+* `Installing Nginx from source`__
+* `A better way of stopping and starting Nginx`__
 
-.. _Installing Nginx from source: http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-installing-nginx-from-source
-.. _A better way of stopping and starting Nginx: http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-adding-an-nginx-init-script
+__ http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-installing-nginx-from-source
+__ http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-adding-an-nginx-init-script
 
 --------
   Update
