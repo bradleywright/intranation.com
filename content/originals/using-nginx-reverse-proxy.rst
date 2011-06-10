@@ -27,7 +27,7 @@ We assume several things for this article:
 
 * You’re comfortable with a command line;
 * You’re using Ubuntu or Debian (I use <kbd>apt-get</kbd> quite a lot);
-* You have <kbd>sudo</kbd> access to a server; and
+* You have ``sudo`` access to a server; and
 * You’re already serving Django or similar on Apache and just want to replace the static/front-end.
 
 --------------
@@ -98,13 +98,13 @@ Nginx will now have started, but won’t be running because Apache is using port
 
 First we need to stop Apache:
 
-::
+.. code-block:: bash
 
   sudo apache2ctl stop
 
 Then we start Nginx:
 
-::
+.. code-block:: bash
 
   sudo /usr/local/bin/nginx
 
@@ -319,7 +319,7 @@ __ http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-adding-an-nginx-init-scr
 __ http://morethanseven.net/
 __ http://thisisglobal.com/
 
-.. code-block:: shell
+.. code-block:: bash
 
   sudo vim /etc/apache2/ports.conf
 
