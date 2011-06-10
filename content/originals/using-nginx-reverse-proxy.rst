@@ -26,8 +26,8 @@ __ http://www.djangoproject.com/
 We assume several things for this article:
 
 * You’re comfortable with a command line;
-* You’re using Ubuntu or Debian (I use <kbd>apt-get</kbd> quite a lot);
-* You have ``sudo`` access to a server; and
+* You’re using Ubuntu or Debian (I use :kbd:`apt-get` quite a lot);
+* You have :kbd:`sudo` access to a server; and
 * You’re already serving Django or similar on Apache and just want to replace the static/front-end.
 
 --------------
@@ -71,7 +71,7 @@ We have a few different options to run here, most of which are personal taste. F
   --http-log-path=/var/log/nginx/access.log \
   --error-log-path=/var/log/nginx/error.log
 
-The only thing I would say should be kept there is the PID file path and the user/group configuration. The user/group matches the accounts that Apache uses, so it keeps everything under the same user structure. If you want to use a different user account, be sure to create this user before running <kbd>./configure</kbd>.
+The only thing I would say should be kept there is the PID file path and the user/group configuration. The user/group matches the accounts that Apache uses, so it keeps everything under the same user structure. If you want to use a different user account, be sure to create this user before running :kbd:`./configure`.
 
 The above command will spit out a set of paths for your convenience: these should look similar to the following:
 
@@ -127,7 +127,7 @@ And change the value to something you can remember.
 
   sudo apache2ctl start
 
-And navigate to your old site but with <kbd>:8080</kbd> appended to the IP address. You should see your old site there. (**Note**: I’ve added <a href="#update">extra information about Apache</a> at the end of this article).
+And navigate to your old site but with :kbd:`:8080` appended to the IP address. You should see your old site there. (**Note**: I’ve added <a href="#update">extra information about Apache</a> at the end of this article).
 
 Configure Nginx
 ---------------
@@ -211,7 +211,7 @@ Nginx comes with some initial configuration, but here’s what I use:
       include             /etc/nginx/sites-enabled/*;
   }
 
-Note that this is the primary configuration, which if you’d followed the above installation verbatim would be at <var>/etc/nginx/nginx.conf</var>.
+Note that this is the primary configuration, which if you’d followed the above installation verbatim would be at :var:`/etc/nginx/nginx.conf`.
 
 To test that this configuration works, we add a simple localhost configuration file:
 
@@ -243,7 +243,7 @@ Now we need to send requests to Apache. This is actually very simple:
 
   sudo vi /etc/nginx/sites-enabled/testproject.conf
 
-We’re pretending that your domain is at <var>testproject.com</var> for the purposes of this exercise.
+We’re pretending that your domain is at :var:`testproject.com` for the purposes of this exercise.
 
 Enter the following into your domain config:
 
@@ -314,7 +314,7 @@ __ http://articles.slicehost.com/2007/12/3/ubuntu-gutsy-adding-an-nginx-init-scr
   Update
 --------
 
-`Gareth Rushgrove`__ mentioned to me at `work`__ that if you’re not exposing Apache to the world on port 80, you probably shouldn’t let it listen to any interface except loopback (otherwise people can see your dynamic site on <kbd>http://yourdomain.com:8080</kbd>). This isn’t an issue for me because I firewall almost every port except 80, but in case you’re interested here’s how to configure Apache:
+`Gareth Rushgrove`__ mentioned to me at `work`__ that if you’re not exposing Apache to the world on port 80, you probably shouldn’t let it listen to any interface except loopback (otherwise people can see your dynamic site on :kbd:`http://yourdomain.com:8080`). This isn’t an issue for me because I firewall almost every port except 80, but in case you’re interested here’s how to configure Apache:
 
 __ http://morethanseven.net/
 __ http://thisisglobal.com/
@@ -323,7 +323,7 @@ __ http://thisisglobal.com/
 
   sudo vim /etc/apache2/ports.conf
 
-And add <kbd>127.0.0.1:</kbd> before the port number you’re using for your Apache, for example:
+And add :kbd:`127.0.0.1:` before the port number you’re using for your Apache, for example:
 
 ::
 
@@ -331,4 +331,4 @@ And add <kbd>127.0.0.1:</kbd> before the port number you’re using for your Apa
 
 Now restart Apache and you should be secure that only Nginx is receiving HTTP requests from the outside world (or “The Internets”, as we in the industry call it).
 
-To check what interfaces *are* listening, period, use this command: <kbd>netstat -pant</kbd>.
+To check what interfaces *are* listening, period, use this command: :kbd:`netstat -pant`.

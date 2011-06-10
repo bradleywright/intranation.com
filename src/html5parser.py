@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+from docutils import nodes
 from docutils.writers import html4css1
 from docutils.core import publish_parts
-from docutils import nodes
+from docutils.parsers.rst import roles
 
 class MyHTMLWriter(html4css1.Writer):
     """
@@ -62,6 +63,14 @@ class MyHTMLTranslator(html4css1.HTMLTranslator):
 
     def depart_literal(self, node):
         self.body.append('</code>')
+
+def inline_roles(role, raw, text, *args):
+    if role == 'kbd':
+        return [nodes.literal('kbd', text)], []
+    elif role == 'var':
+        return [nodes.literal('var', text)], []
+
+roles.register_local_role('kbd', inline_roles)
 
 if __name__ == '__main__':
     import sys
