@@ -15,7 +15,7 @@ __ http://www.slicehost.com/
   Quick theory
 --------------
 
-Just quickly, the theory is that Nginx listens on port 80, and subsequently sends requests for certain URL patterns through to the mod_wsgi server (in my case, Apache) listening on a different port. This server currently serves the meat of my Django__ site. Static assets (<abbr title="Javascript">JS</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr>, images) are served directly from Nginx without ever touching Apache.
+Just quickly, the theory is that Nginx listens on port 80, and subsequently sends requests for certain URL patterns through to the mod_wsgi server (in my case, Apache) listening on a different port. This server currently serves the meat of my Django__ site. Static assets (:abbr:`JS`, <abbr title="Cascading Style Sheets">CSS</abbr>, images) are served directly from Nginx without ever touching Apache.
 
 __ http://www.djangoproject.com/
 

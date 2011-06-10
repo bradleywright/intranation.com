@@ -69,8 +69,12 @@ def inline_roles(role, raw, text, *args):
         return [nodes.literal('kbd', text)], []
     elif role == 'var':
         return [nodes.literal('var', text)], []
+    elif role == 'abbr':
+        return [nodes.literal('abbr', text)], []
 
 roles.register_local_role('kbd', inline_roles)
+roles.register_local_role('var', inline_roles)
+roles.register_local_role('abbr', inline_roles)
 
 if __name__ == '__main__':
     import sys
