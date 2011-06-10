@@ -2,7 +2,7 @@
 from docutils import nodes
 from docutils.writers import html4css1
 from docutils.core import publish_parts
-from docutils.parsers.rst import roles
+from docutils.parsers.rst import roles, directives, Directive
 
 class MyHTMLWriter(html4css1.Writer):
     """
