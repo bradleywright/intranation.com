@@ -14,3 +14,5 @@ build:
 
 serve:
 	run-rstblog serve content
+
+run: clean build serve
