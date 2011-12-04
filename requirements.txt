@@ -1,1 +1,2 @@
 https://github.com/mitsuhiko/rstblog/tarball/master
+pygments
