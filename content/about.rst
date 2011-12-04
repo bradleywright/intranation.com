@@ -20,7 +20,7 @@ paragraph:
 
 .. raw:: html
 
-    <blockquote><p>
+    <blockquote cite="http://hackdaylondon07.backnetwork.com/speakers/#s18"><p>
     Bradley Wright, never one for stereotypes, is an Australian living in
     London. Having graduated from the shady realms of speed-dating web sites,
     he now works for Yahoo! as a web developer on Yahoo! Answers. Brad enjoys
