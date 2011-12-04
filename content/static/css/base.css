@@ -1,0 +1,260 @@
+/* base.css file for intranation.com */
+
+HTML,
+BODY {
+    color: #333;
+    background: #fff;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+BODY {
+    line-height: 1.3;
+}
+
+A {
+    color: #f00;
+}
+
+A:hover {
+    background: #f00;
+    color: #fff;
+    text-decoration: none;
+}
+
+STRONG {
+    font-weight: bold;
+}
+
+EM {
+    font-style: italic;
+    /* Helvetica Neue comes with an italic flavour */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+H1,
+header A {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 161.6%; /* 21px */
+    line-height: 1.71;
+}
+
+header H1,
+header A {
+    color: #fff;
+}
+
+H2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 138.5%; /* 18px */
+    margin-bottom: 0.54em;
+}
+
+H3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 123.1%; /* 16px */
+    line-height: 1.9;
+}
+
+H4 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 107%; /* 14px */
+    line-height: 1.9;
+}
+
+ADDRESS,
+P,
+PRE,
+UL,
+OL {
+    margin-bottom: 1em;
+}
+
+UL LI {
+    margin-left: 20px;
+    margin-bottom: 0.45em;
+    list-style: disc;
+}
+
+OL LI {
+    margin-left: 20px;
+    margin-bottom: 0.45em;
+    list-style: decimal;
+}
+
+PRE,
+CODE,
+KBD,
+SAMP,
+VAR {
+    font-family: "Panic Sans", Monaco, "Courier New", Courier, monospace;
+    font-size: 93%;
+    color: #666;
+}
+
+/* fix up nesting */
+PRE CODE,
+PRE KBD,
+PRE SAMP,
+PRE VAR {
+    font-size: 100%;
+}
+
+ABBR,
+ACRONYM {
+    cursor: help;
+}
+
+BLOCKQUOTE {
+    margin: 0 1em;
+}
+
+/* proper newspaper style quoting */
+BODY:lang(en) BLOCKQUOTE P { quotes: '“' '”' "‘" "’" }
+BLOCKQUOTE P:before { content: open-quote }
+BLOCKQUOTE P:after  { content: no-close-quote }
+BLOCKQUOTE P:last-child:after { content: close-quote }
+
+header {
+    background: #332e25;
+    padding: 2em 0;
+    border-bottom: 1px solid #423d34;
+}
+
+header .container,
+#content,
+#footer .container {
+    width: 750px;
+    margin: 0 auto;
+}
+
+#content {
+    padding: 1em 0;
+}
+
+/* forms */
+FORM {
+    overflow: hidden;
+    *zoom: 1;
+}
+
+FIELDSET SPAN {
+    position: absolute;
+    left: -999em;
+}
+
+INPUT,
+LABEL,
+TEXTAREA {
+    display: block;
+    margin: 0.3em 0;
+}
+
+INPUT.has-error,
+TEXTAREA.has-error {
+    border: 1px solid #f00;
+}
+
+/* comments */
+#comments OL {
+    padding-left: 20px;
+}
+
+#comments LI {
+    list-style-type: decimal;
+}
+
+#comment-form {
+    margin-top: 0.2em;
+    padding: 1em 19px;
+}
+
+#comments .details {
+    border-top: 1px solid #423d34;
+    padding: 0.76em 0;
+    margin-top: 0.76em;
+}
+
+#id_honeypot {
+    display: none;
+}
+
+/* homepage */
+OL LI.hentry {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+}
+
+.entry {
+    overflow: hidden;
+    *zoom: 1;
+}
+
+#entry-title,
+.entry-title,
+.published {
+    float: left;
+}
+
+h2.entry-title {
+    float: none;
+}
+
+h4.published {
+    padding-left: 10px;
+    padding-top: 0.2em;
+}
+
+#published {
+    float: right;
+}
+
+.entry-summary {
+    clear: both;
+}
+
+#entry-content {
+    clear: both;
+}
+
+/* entry tags */
+
+#tags {
+    border: 1px solid #423d34;
+    border-width: 1px 0 0 0;
+    padding: 7px 0;
+}
+
+#tags UL {
+    margin: 0;
+}
+
+#tags LI {
+    list-style: none;
+    margin: 0;
+}
+
+#tags,
+#tags UL {
+    overflow: hidden;
+    *zoom: 1;
+}
+
+#tags H2 {
+    font-size: 100%; /* 13px */
+    float: left;
+    line-height: 1.3; /* reset to base line-height */
+    margin: 0 7px 0 0;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#tags LI {
+    float: left;
+    margin-right: 7px;
+}
+
+#all-tags LI {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
