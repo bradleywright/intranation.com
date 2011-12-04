@@ -10,7 +10,7 @@ It’s common knowledge that when you’re serving a web application you shouldn
 
 __ http://www.thinkvitamin.com/features/webapps/serving-javascript-fast
 
-What I can do, however, is tell you how I≈ set up Nginx__, which is a super light–weight web server, on my VPS here on Slicehost__ (who are awesome, by the way).
+What I can do, however, is tell you how I set up Nginx__, which is a super light–weight web server, on my VPS here on Slicehost__ (who are awesome, by the way).
 
 __ http://nginx.net/
 __ http://www.slicehost.com/
