@@ -9,7 +9,7 @@ install:
 	pip install -E venv -r requirements.txt
 
 build:
-	run-rstblog build
+	run-rstblog build content
 
 serve:
-	run-rstblog serve
+	run-rstblog serve content
