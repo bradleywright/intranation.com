@@ -43,7 +43,7 @@ Firstly you’ll need the basic tools to install Nginx:
 .. code-block:: bash
 
   sudo apt-get install libpcre3 libpcre3-dev libpcrecpp0 \
-libssl-dev zlib1g-dev make
+  libssl-dev zlib1g-dev make
 
 What we’re installing here is the minimum amount of tools needed to run GZip and URL re–writing with Nginx.
 
