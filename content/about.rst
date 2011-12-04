@@ -18,10 +18,14 @@ __ https://smarkets.com/
 When asked to describe himself for a conference, he used the following
 paragraph:
 
+.. raw:: html
+
+    <blockquote><p>
     Bradley Wright, never one for stereotypes, is an Australian living in
     London. Having graduated from the shady realms of speed-dating web sites,
     he now works for Yahoo! as a web developer on Yahoo! Answers. Brad enjoys
     electronic music, reading, beer, and being photographed with beer.
+    </p></blockquote>
 
 …which he thinks is a pretty neat summary. Except now he’d add cycling to his
 interests. And obviously I don’t work at Yahoo! any more.
