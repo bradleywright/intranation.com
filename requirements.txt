@@ -1,2 +1,2 @@
-https://github.com/mitsuhiko/rstblog/tarball/master
+https://github.com/bradleywright/rstblog/tarball/master
 pygments
