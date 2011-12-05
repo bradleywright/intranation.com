@@ -1,2 +1,3 @@
 https://github.com/bradleywright/rstblog/tarball/master
+https://github.com/bradleywright/rst-to-semantic-html5/tarball/master
 pygments
