@@ -1,6 +1,9 @@
 public: yes
 pub_date: 2008-09-28
 tags: [development, django, nginx, sysadmin]
+summary: |
+    How to use the Nginx web server as a proxy frontend to Django or other
+    application servers.
 
 ==============================
   Using Nginx as reverse proxy
@@ -30,8 +33,8 @@ __ http://www.djangoproject.com/
 We assume several things for this article:
 
 * You’re comfortable with a command line;
-* You’re using Ubuntu or Debian (I use :kbd:`apt-get` quite a lot);
-* You have :kbd:`sudo` access to a server; and
+* You’re using Ubuntu or Debian (I use ``apt-get`` quite a lot);
+* You have ``sudo`` access to a server; and
 * You’re already serving Django or similar on Apache and just want to replace the static/front-end.
 
 --------------
@@ -75,7 +78,7 @@ We have a few different options to run here, most of which are personal taste. F
   --http-log-path=/var/log/nginx/access.log \
   --error-log-path=/var/log/nginx/error.log
 
-The only thing I would say should be kept there is the PID file path and the user/group configuration. The user/group matches the accounts that Apache uses, so it keeps everything under the same user structure. If you want to use a different user account, be sure to create this user before running :kbd:`./configure`.
+The only thing I would say should be kept there is the PID file path and the user/group configuration. The user/group matches the accounts that Apache uses, so it keeps everything under the same user structure. If you want to use a different user account, be sure to create this user before running `./configure`.
 
 The above command will spit out a set of paths for your convenience: these should look similar to the following:
 
