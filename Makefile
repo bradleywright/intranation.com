@@ -7,7 +7,7 @@ install:
 	rm -rf venv
 	virtualenv --no-site-packages venv
 	pip install -E venv -r requirements.txt
-	source ./venv/bin/activate
+	echo "To use the virtualenv: source ./venv/bin/activate"
 
 build:
 	run-rstblog build content
