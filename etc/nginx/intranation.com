@@ -1,4 +1,4 @@
-# -*- mode: conf; -*-
+# -*- mode: nginx -*-
 
 # rewrite www. to non-www
 server {
