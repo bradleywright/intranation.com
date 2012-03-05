@@ -1,8 +1,0 @@
----
-active_modules: [pygments, tags, blog]
-author: Brad Wright
-canonical_url: http://intranation.com/
-html_writer: html5writer.html5writer.SemanticHTML5Writer
-modules:
-  pygments:
-    style: tango
