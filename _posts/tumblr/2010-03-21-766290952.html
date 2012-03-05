@@ -1,0 +1,16 @@
+---
+layout: post
+title: Why I don't use VirtualBox
+---
+
+<p>This article is really nothing more than me pointing at a link to <a href="http://intranation.com/entries/2009/03/development-virtual-machines-os-x-using-vmware-and/">my own article about virtualisation on a Mac</a>. <a href="http://benjaminthomas.org/">Benjamin Thomas</a> has written his own article about <a href="http://benjaminthomas.org/2009-11-15/virtualbox-development-virtual-machines.html">virtualised Linux development using VirtualBox</a>. His article covers all same details as mine, but with specific regard to VirtualBox, so I suggest you read that if you’re after VirtualBox information.</p>
+
+<p>However, I had some issues with VirtualBox that I thought were worth outlining:</p>
+
+<ul><li>VirtualBox file sharing <a href="http://www.virtualbox.org/ticket/818">doesn’t support symbolic or hard links</a>, which also means that my <a href="http://intranation.com/entries/2009/12/python-virtualenv-quickstart-django/">much–used <var>virtualenv</var></a> doesn’t work correctly. This is a deal breaker for me, basically;</li>
+
+<li>Networking from host to guest can be a pain, as evidenced by <a href="http://muffinresearch.co.uk/archives/2010/02/08/howto-ssh-into-virtualbox-3-linux-guests/">Stuart Colville’s post regarding host–only network adapters</a>;</li>
+
+<li>Somewhat subjectively, I don’t much like VirtualBox from an interface perspective, and as VMWare seems like a pretty smart company (see their <a class="reference external" href="http://blogs.vmware.com/console/2010/03/vmware-hires-key-developer-for-redis.html">recent Redis talent acquisition as proof</a>) I’m happy to continue supporting them.</li>
+
+</ul><p>Incidentally, I discovered Benjamin’s post through my own ego–tastic <a href="http://www.google.com/alerts">Google Alerts</a>.</p>

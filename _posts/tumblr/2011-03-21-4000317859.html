@@ -1,0 +1,112 @@
+---
+layout: post
+title: Posterous's idea of customer service, and where I differ
+---
+
+<p>I&#8217;ve been dabbling with <a href="http://posterous.com/">Posterous</a> as a potential way of mitigating Tumblr&#8217;s recent downtime issues.</p>
+
+
+
+<p>The <abbr title="Too long; didn't read">tl;dr</abbr> version is that I didn&#8217;t like their service, and suggest some <a href="#improvements">improvements.</a></p>
+
+
+
+<h2>My experience with Posterous</h2>
+
+
+
+<p>After importing my Tumblr blog into their system (which was all very smooth), I tried to edit a post and remove it, using one of their combo buttons:</p>
+
+
+
+<p><img src="http://s3.intranation.com/blog/posterous-customer-service/posterous-combo-button.png" alt="Combo button" width="75" height="33"/></p>
+
+
+
+<p>Unfortunately, in both Safari and Chrome (so WebKit, basically), their Javascript is broken. It fails, and then fails to clobber the event propagation, so the page reloads (as obviously, not being progressively enhanced, all their links are empty).</p>
+
+
+
+<p>A cursory look in my console shows really basic errors like:</p>
+
+
+
+<pre><code>Uncaught TypeError: Cannot call method 'addClassName' of null</code></pre>
+
+
+
+<p>or:</p>
+
+
+
+<pre><code>Uncaught TypeError: Property '$' of object [object DOMWindow] is not a function</code></pre>
+
+
+
+<p>Now, being the responsible developer I am, I write into them with a bug report (this is on January 29, almost 2 months ago):</p>
+
+
+
+<blockquote><p>Every time I click the &#8220;Edit | [down arrow]&#8221; button (the down arrow specifically), the page goes to a blank page. I assume this is because the JS is broken so you&#8217;re not cancelling the click event on the link. I&#8217;m using Safari 5.0.3 on Snow Leopard.</p></blockquote>
+
+
+
+<p>Not the most gracious email, I&#8217;m sure we can all agree, but then again this also seems like the kind of basic error that shouldn&#8217;t happen in the first place.</p>
+
+
+
+<p>Yesterday, on March 20th (almost 2 months after submitting the error report), I get the following response from Posterous:</p>
+
+
+
+<blockquote><p>Hello Brad,</p>
+
+
+
+<p>Should you still be experience the issue you emailed us about, try clearing safari&#8217;s cache and cookies and trying again, or using another browser.</p>
+
+
+
+<p>Sorry for the delayed response,</p>
+
+
+
+<p>Theodore</p></blockquote>
+
+
+
+<p>I mean, what? This is a fundamentally broken part of the site, and the best they can tell is is:</p>
+
+
+
+<ul><li>They haven&#8217;t tried verifying that the bug still exists (or even existed in the first place);</li>
+
+<li>They certainly haven&#8217;t tried to fix it; and</li>
+
+<li>Their solution is to clear everything or use another browser.</li></ul><p>And I waited two months for that? As a professional developer it&#8217;s my educated opinion that the errors I describe above are easy to notice and probably easy to fix. And they can&#8217;t even be bothered checking them.</p>
+
+
+
+<p>No thanks Posterous, I&#8217;ll be sticking where I am for now.</p>
+
+
+
+<h2 id="improvements">What I would have done</h2>
+
+
+
+<p>At <a href="http://smarkets.com">Smarkets</a> customer service is a part of our business that we take very seriously. I would have responded roughly as follows:</p>
+
+
+
+<ul><li>Reply within a day, telling the customer we&#8217;ll look into it, and apologise for the inconvenience they&#8217;re experiencing (note that this is mostly a form letter, and thus is very easy to reply with);</li>
+
+<li>Work out if there&#8217;s actually a bug:<ul><li>If there is, file it, and schedule a fix; or</li>
+
+    <li>If not, work out why the user is experiencing it anyway.</li>
+
+</ul></li>
+
+<li>Reply to the user with either your explanation for what they might be doing wrong, and find out if they can give you more information; or</li>
+
+<li>Tell them when they can expect a fix, as you&#8217;ve found the bug. Give them some kudos in the email for finding the bug for them.</li></ul><p>At a startup, every customer is valuable and should be treated like they&#8217;re important and that their opinion matters. These are trivial things to get right, and prevent long-winded disgruntled blog posts like this.</p>

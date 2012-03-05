@@ -1,0 +1,8 @@
+---
+layout: post
+title: Issues mounting shared folders in VMWare Fusion 3
+---
+
+<p>I recently took advantage of the <a href="http://www.vmware.com/vmwarestore/fusion_upgrade_promo.html">VMWare 3 upgrade for only $9.99 USD</a>, which has all gone well, except for one issue with <code>/etc/fstab</code>: it turns out that VMWare Fusion 3 tools doesn&#8217;t actually respect your mount settings, which means you lose all the permissions information contained therein.</p>
+
+<p>There&#8217;s <a href="http://dmoonc.com/blog/?p=288">a solution to the mount problem here</a>, which works perfectly after a reboot. I hope VMWare fixes this soon, though: it&#8217;s a pretty nasty bug.</p>
