@@ -1,6 +1,4 @@
 # ignore Mac cruft
 .DS_Store
-# ignore virtualenv
-venv
 # ignore built files
-content/_build
+_site
