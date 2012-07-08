@@ -3,3 +3,4 @@
 # ignore built files
 _site
 static/css/*.css
+.sass-cache
