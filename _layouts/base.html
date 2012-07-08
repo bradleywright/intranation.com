@@ -2,22 +2,20 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        {% block htmlhead %}
-        <title>{% block title %}Home{% endblock %} — intranation.com</title>
+        <title>{% if page.title %}{{ page.title }}{% else %}sdgsdg{% endif %}</title>
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
         <link rel="stylesheet" href="/static/css/base.css" type="text/css">
         <link href="/feed.atom" rel="alternate" title="Recent Blog Posts" type="application/atom+xml">
         <link rel="copyright" href="http://creativecommons.org/licenses/by-sa/2.0/uk/" type="text/html" title="Creative Commons Attribution-ShareAlike 2.0 England &amp; Wales Licence">
         <link rel="openid.server" href="http://www.myopenid.com/server">
         <link rel="openid.delegate" href="http://intranation.myopenid.com/">
-        {% endblock %}
     </head>
     <body>
         <header>
-            {% block header_link %}<a href="/" rel="home">intranation</a>{% endblock %}
+            {% if page.home %}<h1>intranation</h1>{% else %}<a href="/" rel="home">intranation</a>{% endif %}
         </header>
         <div id="content">
-            {% block body %}{% endblock %}
+            {{ content }}
         </div>
         <div id="footer">
             <div class="container">
