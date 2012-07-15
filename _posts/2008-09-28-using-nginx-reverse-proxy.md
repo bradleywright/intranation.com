@@ -352,7 +352,7 @@ sudo vim /etc/apache2/ports.conf
 And add `127.0.0.1:` before the port number you’re using for your
 Apache, for example:
 
-{% highlight nginx %}
+{% highlight apache %}
 Listen 127.0.0.1:8080
 {% endhighlight %}
 
