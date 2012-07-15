@@ -4,3 +4,4 @@
 _site
 static/css/*.css
 .sass-cache
+/.rbenv-version
