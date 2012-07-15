@@ -43,8 +43,8 @@ from Nginx without ever touching Apache.
 We assume several things for this article:
 
 * You’re comfortable with a command line;
-* You’re using Ubuntu or Debian (I use ``apt-get`` quite a lot);
-* You have ``sudo`` access to a server; and
+* You’re using Ubuntu or Debian (I use `apt-get` quite a lot);
+* You have `sudo` access to a server; and
 * You’re already serving Django or similar on Apache and just want to
   replace the static/front-end.
 
@@ -132,8 +132,8 @@ Then we start Nginx:
 sudo /usr/local/bin/nginx
 {% endhighlight %}
 
-Note that the path to ``nginx`` will be different depending on what
-value (if any) you used in the ``./configure`` stage.
+Note that the path to `nginx` will be different depending on what
+value (if any) you used in the `./configure` stage.
 
 If you now navigate to your IP address, you should see a “Welcome to
 Nginx!” message. Great!
