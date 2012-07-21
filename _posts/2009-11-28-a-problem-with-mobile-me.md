@@ -8,7 +8,7 @@ summary: |
 ---
 
 {{ page.title }}
-=======================================
+================
 
 I currently use [Apple][0]’s [MobileMe][1] service to keep my iPhone and
 Mac in sync. This I do slightly begrudgingly, but do so for the
