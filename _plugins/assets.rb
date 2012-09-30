@@ -15,11 +15,12 @@ module Jekyll
       assets.append_path(File.join(root, site.config['sprockets_assets'], "css"))
       assets.append_path(File.join(root, site.config['sprockets_assets'], "js"))
 
-      %w( main.css ).each do |asset|
-        asset = assets.find_asset(asset)
-        p asset
-        p asset.methods
-        p asset.body
+      target_dir = Pathname(root).join(site.config['sprockets_target'])
+
+      %w( main.css ).each do |asset_name|
+        target_file = target_dir.join(asset_name)
+        asset = assets.find_asset(asset_name)
+        asset.write_to(target_file)
       end
     end
   end

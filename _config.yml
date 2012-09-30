@@ -3,4 +3,5 @@ permalink: /:year/:month/:title/
 #lsi: true
 exclude: Makefile README.rst
 # assets
-sprockets_assets: static
+sprockets_assets: _static
+sprockets_target: static

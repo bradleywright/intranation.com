@@ -2,5 +2,6 @@
 .DS_Store
 # ignore built files
 _site
+static
 .sass-cache
 /.rbenv-version
