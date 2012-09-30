@@ -1,7 +1,7 @@
 pygments: true
 permalink: /:year/:month/:title/
 #lsi: true
-exclude: Makefile README.rst
+exclude: README.rst
 # assets
 sprockets_root: _static
 sprockets_target: static
