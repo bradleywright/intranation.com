@@ -90,5 +90,5 @@ need to be.
 **Update 2:** [Ryan has responded to me on Twitter, and I followed up](http://tumblr.intranation.com/post/1065121682/follow-up-to-previous-ux-and-ryan-carson-post).
 
 **Update 3 (yay, more):** Andy Budd has [written an excellent rebuttal to Ryan](http://www.andybudd.com/archives/2010/09/why_i_think_rya/index.php) which includes a brief foray into the history of job titles on the web, and how UX fits into that scheme. I agree with pretty much everything he's said.
-  *[SEO]: Search Engine Optimisation
 
+*[SEO]: Search Engine Optimisation
