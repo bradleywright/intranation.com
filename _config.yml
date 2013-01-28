@@ -6,3 +6,5 @@ exclude: README.rst etc Gemfile Gemfile.lock old-content tumblr_files
 sprockets_root: _static
 sprockets_target: static
 sprockets_assets: main.css
+# use Kramdown
+markdown: kramdown
