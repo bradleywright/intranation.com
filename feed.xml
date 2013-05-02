@@ -24,6 +24,7 @@ layout: nil
       <name>Bradley Wright</name>
       <uri>http://{{ site.url }}/</uri>
     </author>
+    {% if post.summary %}<summary>{{ post.summary | trim | xml_escape }}</summary>{% endif %}
     <content type="html">{{ post.content | xml_escape }}</content>
   </entry>
   {% endfor %}
