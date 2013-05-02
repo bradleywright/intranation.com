@@ -1,6 +1,13 @@
 module Jekyll
   require 'sprockets'
 
+  module Logger
+    # Jekyll doesn't have a debug method
+    def self.debug(message)
+      info('[DEBUG]', message)
+    end
+  end
+
   class SprocketsGenerator < Generator
     safe true
     priority :low
@@ -8,7 +15,7 @@ module Jekyll
     def generate(site)
       root = site.source
       assets = Sprockets::Environment.new(root) do |env|
-
+        env.logger = Logger
       end
 
       assets.append_path(File.join(root, site.config['sprockets_root']))
