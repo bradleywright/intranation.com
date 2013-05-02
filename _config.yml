@@ -1,7 +1,7 @@
 pygments: true
 permalink: /:year/:month/:title/
 #lsi: true
-exclude: README.rst etc Gemfile Gemfile.lock old-content tumblr_files
+exclude: [README.rst etc Gemfile Gemfile.lock old-content tumblr_files]
 # assets
 sprockets_root: _static
 sprockets_target: static
