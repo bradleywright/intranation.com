@@ -4,6 +4,5 @@
 _site
 static
 .sass-cache
-/.rbenv-version
 /.bundle
 /.ruby-version
