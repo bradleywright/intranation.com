@@ -11,16 +11,16 @@ summary: |
 {{ page.title }}
 ================
 
-It’s common knowledge that when you’re serving a web application you
-shouldn’t use a standard Apache install to serve static assets, as it
-comes with too much overhead. I won’t go into the details of *why*
-here, as it’s been covered by many other people
+It's common knowledge that when you're serving a web application you
+shouldn't use a standard Apache install to serve static assets, as it
+comes with too much overhead. I won't go into the details of *why*
+here, as it's been covered by many other people
 [better qualified than I][0].
 
 [0]: http://www.thinkvitamin.com/features/webapps/serving-javascript-fast
 
 What I can do, however, is tell you how I set up [Nginx][1], which is
-a super light–weight web server, on my VPS here on [Slicehost][2] (who
+a super light-weight web server, on my VPS here on [Slicehost][2] (who
 are awesome, by the way).
 
 [1]: http://nginx.net/
@@ -42,29 +42,29 @@ from Nginx without ever touching Apache.
 
 We assume several things for this article:
 
-* You’re comfortable with a command line;
-* You’re using Ubuntu or Debian (I use `apt-get` quite a lot);
+* You're comfortable with a command line;
+* You're using Ubuntu or Debian (I use `apt-get` quite a lot);
 * You have `sudo` access to a server; and
-* You’re already serving Django or similar on Apache and just want to
+* You're already serving Django or similar on Apache and just want to
   replace the static/front-end.
 
 ## First server
 
-Firstly you’ll need the basic tools to install Nginx:
+Firstly you'll need the basic tools to install Nginx:
 
 {% highlight console %}
 sudo apt-get install libpcre3 libpcre3-dev libpcrecpp0 \
 libssl-dev zlib1g-dev make
 {% endhighlight %}
 
-What we’re installing here is the minimum amount of tools needed to
-run GZip and URL re–writing with Nginx.
+What we're installing here is the minimum amount of tools needed to
+run GZip and URL re-writing with Nginx.
 
 ### Get Nginx
 
 At the time of writing, the latest stable version of Nginx was 0.6.32,
-so let’s get that. Note that we need full source code as the version
-that ships with Ubuntu and Debian is 0.5.3 or similar, which doesn’t
+so let's get that. Note that we need full source code as the version
+that ships with Ubuntu and Debian is 0.5.3 or similar, which doesn't
 have URL rewriting or GZip compression (both of which I really want).
 
 {% highlight console %}
@@ -75,7 +75,7 @@ tar -zxvf nginx-0.6.32.tar.gz
 cd nginx-0.6.32
 {% endhighlight %}
 
-So we downloaded the source, de–compressed it, and went into the
+So we downloaded the source, de-compressed it, and went into the
 directory that was created.
 
 ### Compile Nginx
@@ -115,7 +115,7 @@ nginx http fastcgi temporary files: "/usr/local/nginx/fastcgi_temp"
 
 You may want to copy them somewhere for posterity.
 
-Nginx will now have started, but won’t be running because Apache is
+Nginx will now have started, but won't be running because Apache is
 using port 80, and Nginx is very helpful and fails silently.
 
 ## Swap Apache and Nginx
@@ -135,8 +135,8 @@ sudo /usr/local/bin/nginx
 Note that the path to `nginx` will be different depending on what
 value (if any) you used in the `./configure` stage.
 
-If you now navigate to your IP address, you should see a “Welcome to
-Nginx!” message. Great!
+If you now navigate to your IP address, you should see a "Welcome to
+Nginx!" message. Great!
 
 ### Make Apache listen on a different port
 
@@ -153,13 +153,13 @@ sudo apache2ctl start
 {% endhighlight %}
 
 And navigate to your old site but with `8080` appended to the IP
-address. You should see your old site there. (**Note**: I’ve added <a
+address. You should see your old site there. (**Note**: I've added <a
 href="#update">extra information about Apache</a> at the end of this
 article).
 
 ### Configure Nginx
 
-Nginx comes with some initial configuration, but here’s what I use:
+Nginx comes with some initial configuration, but here's what I use:
 
 {% highlight nginx %}
 user                www-data www-data;
@@ -236,7 +236,7 @@ http {
 }
 {% endhighlight %}
 
-Note that this is the primary configuration, which if you’d followed
+Note that this is the primary configuration, which if you'd followed
 the above installation verbatim would be at `/etc/nginx/nginx.conf`.
 
 To test that this configuration works, we add a simple localhost
@@ -269,7 +269,7 @@ Now we need to send requests to Apache. This is actually very simple:
 sudo vi /etc/nginx/sites-enabled/testproject.conf
 {% endhighlight %}
 
-We’re pretending that your domain is at `testproject.com` for the purposes of this exercise.
+We're pretending that your domain is at `testproject.com` for the purposes of this exercise.
 
 Enter the following into your domain config:
 
@@ -310,7 +310,7 @@ server {
 Again, the IP address and locations of configuration files depend on
 whether you changed anything during the process so far.
 
-### That’s it!
+### That's it!
 
 When you next start Nginx, it should send all requests through to
 Apache on port 8080, and your memory overhead should start coming
@@ -318,8 +318,8 @@ down.
 
 ## What next?
 
-In the next instalment we’re going to set up Nginx as a static content
-server, in order to bypass Apache completely for anything non–dynamic.
+In the next instalment we're going to set up Nginx as a static content
+server, in order to bypass Apache completely for anything non-dynamic.
 
 Enjoy!
 
@@ -335,12 +335,12 @@ This article is based on the hard work of those awesome people over at
 
 ## Update
 
-[Gareth Rushgrove][5] mentioned to me at [work][6] that if you’re not
-exposing Apache to the world on port 80, you probably shouldn’t let it
+[Gareth Rushgrove][5] mentioned to me at [work][6] that if you're not
+exposing Apache to the world on port 80, you probably shouldn't let it
 listen to any interface except loopback (otherwise people can see your
-dynamic site on `http://yourdomain.com:8080`). This isn’t an
+dynamic site on `http://yourdomain.com:8080`). This isn't an
 issue for me because I firewall almost every port except 80, but in
-case you’re interested here’s how to configure Apache:
+case you're interested here's how to configure Apache:
 
 [5]: http://morethanseven.net/
 [6]: http://thisisglobal.com/
@@ -349,7 +349,7 @@ case you’re interested here’s how to configure Apache:
 sudo vim /etc/apache2/ports.conf
 {% endhighlight %}
 
-And add `127.0.0.1:` before the port number you’re using for your
+And add `127.0.0.1:` before the port number you're using for your
 Apache, for example:
 
 {% highlight apache %}
@@ -357,7 +357,7 @@ Listen 127.0.0.1:8080
 {% endhighlight %}
 
 Now restart Apache and you should be secure that only Nginx is
-receiving HTTP requests from the outside world (or “The Internets”, as
+receiving HTTP requests from the outside world (or "The Internets", as
 we in the industry call it).
 
 To check what interfaces *are* listening, period, use this command:
