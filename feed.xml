@@ -1,0 +1,31 @@
+---
+layout: nil
+---
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>{{ site.url }}</title>
+  <link href="http://{{ site.url }}/"/>
+  <link type="application/atom+xml" rel="self" href="http://{{ site.url }}/feed.xml"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>http://{{ site.url }}/</id>
+  <author>
+    <name>Bradley Wright</name>
+    <email>brad@intranation.com</email>
+  </author>
+
+  {% for post in site.posts %}
+  <entry>
+    <id>http://{{site.url}}{{ post.id }}</id>
+    <link type="text/html" rel="alternate" href="http://{{ site.url }}{{ post.url }}"/>
+    <title>{{ post.title | xml_escape }}</title>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <author>
+      <name>Bradley Wright</name>
+      <uri>http://{{ site.url }}/</uri>
+    </author>
+    <content type="html">{{ post.content | xml_escape }}</content>
+  </entry>
+  {% endfor %}
+
+</feed>
