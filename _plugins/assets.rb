@@ -1,7 +1,7 @@
 module Jekyll
   require 'sprockets'
 
-  module Logger
+  class Logger
     # Jekyll doesn't have a debug method
     def self.debug(message)
       info('[DEBUG]', message)
